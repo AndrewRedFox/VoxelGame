@@ -1,6 +1,6 @@
 package input;
 
-import core.WindowManager;
+import Renderer.WindowManager;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallbackI;
 

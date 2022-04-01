@@ -1,10 +1,9 @@
 package input;
 
-import core.WindowManager;
+import Renderer.WindowManager;
 import org.lwjgl.glfw.GLFW;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
-import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
 
 public class Keyboard {
     private static boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];

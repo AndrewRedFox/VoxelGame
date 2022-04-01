@@ -2,7 +2,7 @@ package core;
 import Renderer.Renderer;
 import Renderer.Loader;
 import Renderer.RawModel;
-import core.WindowManager;
+import Renderer.WindowManager;
 import input.Keyboard;
 import input.Mouse;
 import org.lwjgl.glfw.GLFW;

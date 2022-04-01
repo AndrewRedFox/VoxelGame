@@ -1,6 +1,5 @@
-package core;
+package Renderer;
 
-import input.Mouse;
 import org.lwjgl.glfw.*;
 import static org.lwjgl.glfw.GLFW.*;
 import org.lwjgl.opengl.*;
