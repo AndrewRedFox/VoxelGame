@@ -1,6 +1,6 @@
 package input;
 
-import Renderer.WindowManager;
+import Renderer.GraphicsDisplay;
 import org.lwjgl.glfw.GLFW;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
@@ -9,7 +9,7 @@ public class Keyboard {
     private static boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
 
     public static boolean keyDown(int keyId) {//врнет тру если мы нажмем на клавишу
-        return GLFW.glfwGetKey(WindowManager.getWindow().getThisWindow(), keyId) == GLFW_PRESS;
+        return GLFW.glfwGetKey(GraphicsDisplay.getWindow().getThisWindow(), keyId) == GLFW_PRESS;
     }
 
     public static boolean keyPressed(int keyId) {

@@ -2,6 +2,8 @@ package core;
 
 public class Main {
     public static void main(String[] args) {
-        new Launcher().run();
+        Launcher launcher = new Launcher();
+        launcher.run();
     }
+
 }

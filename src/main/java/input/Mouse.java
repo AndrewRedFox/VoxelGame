@@ -1,6 +1,6 @@
 package input;
 
-import Renderer.WindowManager;
+import Renderer.GraphicsDisplay;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallbackI;
 
@@ -21,7 +21,7 @@ public class Mouse {
     }
 
     public static boolean buttonDown(int keyId) {
-        return GLFW.glfwGetMouseButton(WindowManager.getWindow().getThisWindow(), keyId) == GLFW_PRESS;
+        return GLFW.glfwGetMouseButton(GraphicsDisplay.getWindow().getThisWindow(), keyId) == GLFW_PRESS;
     }
 
     public static boolean buttonPressed(int keyId) {
@@ -43,12 +43,9 @@ public class Mouse {
     }
 
     public static void setCursorPosCallback(long window) {
-        GLFW.glfwSetCursorPosCallback(window, new GLFWCursorPosCallbackI() {
-            @Override
-            public void invoke(long window, double xpos, double ypos) {
-                mouseX = xpos;
-                mouseY = ypos;
-            }
+        GLFW.glfwSetCursorPosCallback(window, (window1, xpos, ypos) -> {
+            mouseX = xpos;
+            mouseY = ypos;
         });
     }
 }
