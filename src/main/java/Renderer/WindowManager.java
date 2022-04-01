@@ -20,7 +20,7 @@ public class WindowManager {
         return width;
     }
 
-    public int getHight() {
+    public int getHeight() {
         return hight;
     }
 
