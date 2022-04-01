@@ -14,5 +14,6 @@ public class Renderer {
         glDrawElements(GL_TRIANGLES,model.getVertexCount(),GL_UNSIGNED_INT,0);
         glDisableVertexAttribArray(0);
         glBindVertexArray(0);//конец метода
+        //df/fd
     }
 }
