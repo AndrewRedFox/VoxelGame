@@ -1,6 +1,6 @@
 package core.GameEngine.GameCore;
 
-public class MassConnectedWithSpring extends Simulation {
+public class MassConnectedWithSpring extends Simulation { // устанавливает точку присоединения и положение массы
 
     public float springConstant; // больше springConstant, сильнее сила притяжения
     public Vector3D connectionPos; // Точка

@@ -1,6 +1,6 @@
 package core.GameEngine.GameCore;
 
-public class MotionUnderGravitation extends Simulation {
+public class MotionUnderGravitation extends Simulation { // создает массу и применяет силу (гравитации) к ней
 
     Vector3D gravitaion; //ускорение свободного падения
 
