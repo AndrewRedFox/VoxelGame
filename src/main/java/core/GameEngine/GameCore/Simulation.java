@@ -38,7 +38,7 @@ public class Simulation { //massive для симуляции масс
         // В других контейнерах мы переопределим этот метод
     }
 
-    public void simulate(float dt) { // Итерация для каждой массы
+    public void simulate(float dt) { //процедура для каждой массы
         for (int i = 0; i < numOfMasses; ++i) {
             masses[i].simulate(dt);
         }
@@ -47,7 +47,7 @@ public class Simulation { //massive для симуляции масс
     public void operate(float dt) { // Полная процедура симуляции.
         init();            // 1. Силу в 0
         solve();           // 2. Применяем силы
-        simulate(dt);      // 3. Итерация
+        simulate(dt);      // 3. Процедура
     }
 
 }
