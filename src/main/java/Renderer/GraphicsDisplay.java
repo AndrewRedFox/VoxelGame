@@ -1,5 +1,6 @@
 package Renderer;
 
+import core.GameEngine.MBO;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.*;
@@ -17,10 +18,25 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public class GraphicsDisplay {
     public static final int vertexSize = 4;
+    public static final float voxelSize = 1.0f;
     private long window;
+    private MBO[] MBOs;
     private final int height;
     private final int width;
+    private int frames = 0;
+    private double currentTime = 0.0;
+    private double lastTime = 0.0;
     private final String name;
+
+    private void printRenderTime(){
+        frames++;
+        currentTime = glfwGetTime();
+        if(currentTime - lastTime > 1.0) {
+            System.out.println(frames);
+            lastTime = currentTime;
+            frames = 0;
+        }
+    }
 
     String vertexShaderSource = """
             #version 330 core
@@ -48,10 +64,11 @@ public class GraphicsDisplay {
             }
             """;
 
-    public GraphicsDisplay(int width, int height, String name) {
+    public GraphicsDisplay(int width, int height, String name, MBO[] MBOs) {
         this.height = height;
         this.width = width;
         this.name = name;
+        this.MBOs = MBOs;
     }
 
     public void run() {
@@ -90,7 +107,7 @@ public class GraphicsDisplay {
 
         // Set up a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+            if ((key == GLFW_KEY_ESCAPE || key == GLFW_KEY_Q) && action == GLFW_RELEASE)
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
         });
 
@@ -122,6 +139,12 @@ public class GraphicsDisplay {
         glfwShowWindow(window);
     }
 
+    private int countVoxels (MBO[] mboS) {
+        int sum = 0;
+        for (MBO mbo : mboS) sum += mbo.voxels.length;
+        return sum;
+    }
+
     private void loop() {
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.
@@ -135,57 +158,76 @@ public class GraphicsDisplay {
 
         glEnable(GL_DEPTH_TEST);
 
-        float[] vertices = {
-                0f,  0f,  0f,     0.0f, 0.0f,
-                0f,  1f,  0f,     0.0f, 1.0f,
-                1f,  1f,  0f,     1.0f, 1.0f,
-                1f,  0f,  0f,     1.0f, 0.0f,
+        int mboSLength = countVoxels(MBOs);
+        float[] vertices = new float[mboSLength * 120];
+        int[] indices = new int[mboSLength * 36];
 
-                1f,  0f,  0f,     0.0f, 0.0f,
-                1f,  1f,  0f,     0.0f, 1.0f,
-                1f,  1f,  -1f,     1.0f, 1.0f,
-                1f,  0f,  -1f,     1.0f, 0.0f,
+        int idVoxel = 0;
+        for (MBO mbo : MBOs) {
+            for (int k = 0; k < mbo.voxels.length; k++) {
+                float[] verticesTemp = {
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 0.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 1.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 1.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 0.0f,
 
-                0f,  0f,  0f,     1.0f, 0.0f,
-                0f,  1f,  0f,     1.0f, 1.0f,
-                0f,  1f,  -1f,     0.0f, 1.0f,
-                0f,  0f,  -1f,     0.0f, 0.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 0.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 1.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 1.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 0.0f,
 
-                0f,  0f,  -1f,     1.0f, 0.0f,
-                0f,  1f,  -1f,     1.0f, 1.0f,
-                1f,  1f,  -1f,     0.0f, 1.0f,
-                1f,  0f,  -1f,     0.0f, 0.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 0.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 1.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 1.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 0.0f,
 
-                0f,  0f,  0f,     1.0f, 0.0f,
-                0f,  0f,  -1f,     1.0f, 1.0f,
-                1f,  0f,  -1f,     0.0f, 1.0f,
-                1f,  0f,  0f,     0.0f, 0.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 0.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 1.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 1.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 0.0f,
 
-                0f,  1f,  0f,     1.0f, 0.0f,
-                0f,  1f,  -1f,     1.0f, 1.0f,
-                1f,  1f,  -1f,     0.0f, 1.0f,
-                1f,  1f,  0f,     0.0f, 0.0f,
-        };
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 0.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 1.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 1.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 0.0f,
 
-        int[] indices = {
-                0, 2, 1,
-                0, 3, 2,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 0.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 1.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 1.0f,
+                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 0.0f,
 
-                0 + 4, 2 + 4, 1 + 4,
-                0 + 4, 3 + 4, 2 + 4,
+                };
 
-                0 + 8, 2 + 8, 1 + 8,
-                0 + 8, 3 + 8, 2 + 8,
+                int[] indicesTemp = {
+                        0, 2, 1,
+                        0, 3, 2,
 
-                0 + 12, 2 + 12, 1 + 12,
-                0 + 12, 3 + 12, 2 + 12,
+                        4, 6, 5,
+                        4, 7, 6,
 
-                0 + 16, 2 + 16, 1 + 16,
-                0 + 16, 3 + 16, 2 + 16,
+                        8, 10, 9,
+                        8, 11, 10,
 
-                0 + 20, 2 + 20, 1 + 20,
-                0 + 20, 3 + 20, 2 + 20,
-        };
+                        12, 14, 13,
+                        12, 15, 14,
+
+                        16, 18, 17,
+                        16, 19, 18,
+
+                        20, 22, 21,
+                        20, 23, 22
+                };
+
+                for (int j = 0; j < 120; j++) {
+                    vertices[idVoxel * 120 + j] = verticesTemp[j];
+                }
+                for (int j = 0; j < 36; j++) {
+                    indices[idVoxel * 36 + j] = indicesTemp[j] + idVoxel * 24;
+                }
+                idVoxel++;
+            }
+        }
+
 
 
         Shader shader = new Shader(vertexShaderSource, fragmentShaderSource);
@@ -215,11 +257,11 @@ public class GraphicsDisplay {
             shader.activate();
 
             camera.Inputs(window);
-            camera.Matrix(45.0f, 0.1f, 100.0f, shader, "camMatrix");
+            camera.Matrix(45.0f, 0.1f, 10000.0f, shader, "camMatrix");
 
             texture.bind();
             vertexArrayObject.bind();
-
+            printRenderTime();
             glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0);
 
             glfwSwapBuffers(window);

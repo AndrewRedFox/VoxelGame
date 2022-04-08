@@ -1,10 +1,10 @@
 package core.GameEngine;
 
 public class MBO {
-    Voxel[] voxels;
+    public Voxel[] voxels;
     private float x, y, z;
     private float angleX, angleY, angleZ;
-    MBO(Voxel[] voxels, float x, float y, float z, float angleX, float angleY, float angleZ){
+    public MBO(Voxel[] voxels, float x, float y, float z, float angleX, float angleY, float angleZ){
         this.voxels = voxels;
         this.x = x;
         this.y = y;
