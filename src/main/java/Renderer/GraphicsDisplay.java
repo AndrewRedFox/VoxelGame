@@ -1,15 +1,12 @@
 package Renderer;
-import core.GameEngine.GameCore;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.nio.*;
-import java.nio.file.Files;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -22,16 +19,18 @@ public class GraphicsDisplay {
     private final int height;
     private final int width;
     private final String name;
-    private GameCore gameCore;
 
     String vertexShaderSource = """
             #version 330 core
             layout (location = 0) in vec3 aPos;
             layout (location = 1) in vec2 aTex;
             out vec2 texCoord;
+            
+            uniform mat4 camMatrix;
+            
             void main()
             {
-                gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+                gl_Position = camMatrix * vec4(aPos, 1.0f);
                 texCoord = aTex;
             }
             """;
@@ -47,10 +46,9 @@ public class GraphicsDisplay {
             }
             """;
 
-    public GraphicsDisplay(int width, int height, String name, GameCore gameCore){
+    public GraphicsDisplay(int width, int height, String name){
         this.height = height;
         this.width = width;
-        this.gameCore = gameCore;
         this.name = name;
     }
     public void run() {
@@ -131,18 +129,36 @@ public class GraphicsDisplay {
 
         // Set the clear color
         glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+        /*
+        float[] vertices = {
+                -0.5f,  0.0f,  0.5f,    0.0f, 0.0f,
+                -0.5f,  0.0f, -0.5f,    1.0f, 1.0f,
+                 0.5f,  0.0f, -0.5f,    2.0f, 2.0f,
+                 0.5f,  0.0f,  0.5f,    3.0f, 3.0f,
+                 0.0f,  0.8f,  0.0f,    4.5f, 4.0f
+        };
+
+        int[] indices = {
+                0, 1, 2,
+                0, 2, 3,
+                0, 1, 4,
+                1, 2, 4,
+                2, 3, 4,
+                3, 0, 4
+        };*/
 
         float[] vertices = {
                 -0.5f, -0.5f,  0.0f,    0.0f, 0.0f,
                 -0.5f,  0.5f,  0.0f,    0.0f, 1.0f,
                  0.5f,  0.5f,  0.0f,    1.0f, 1.0f,
-                 0.5f, -0.5f,  0.0f,    1.0f, 0.0f
+                 0.5f, -0.5f,  0.0f,    1.0f, 0.0f,
         };
 
         int[] indices = {
                 0, 2, 1,
                 0, 3, 2
         };
+
 
         Shader shader = new Shader(vertexShaderSource, fragmentShaderSource);
 
@@ -161,15 +177,36 @@ public class GraphicsDisplay {
         Texture texture = new Texture("picture.png");
         texture.texUnit(shader, "tex0", 0);
 
+        Camera camera = new Camera(width, height, new Vector3f(0.0f, 0.0f, 2.0f));
+
+        float rotation = 0.0f;
         while ( !glfwWindowShouldClose(window) ) {
             glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
             shader.activate();
+
+            camera.Inputs(window);
+            camera.Matrix(45.0f, 0.1f, 100.0f, shader, "camMatrix");
+            /*Matrix4f model = new Matrix4f();
+            Matrix4f view = new Matrix4f();
+            Matrix4f proj = new Matrix4f();
+
+            model = model.rotate(rotation, 0.0f, 1.0f, 0.0f);
+            //rotation = (rotation+0.01f)%(3.1415f*2.0f);
+            view = view.translate(new Vector3f(0.0f, -0.5f, -2.0f));
+            proj = proj.perspective(3.1415f/4.0f, (float) (width/height), 0.1f, 100.0f );
+
+            int camLoc = glGetUniformLocation(shader.getId(), "camMatrix");
+
+            try (MemoryStack stack = MemoryStack.stackPush()) {
+                glUniformMatrix4fv(camLoc, false, proj.mul(view).mul(model).get(stack.mallocFloat(16)));
+            } catch (Exception e) { System.out.println(e + " error"); }*/
+
             texture.bind();
             vertexArrayObject.bind();
 
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0);
 
             glfwSwapBuffers(window);
             glfwPollEvents();

@@ -44,6 +44,8 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-par::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
+    //implementation group: 'org.ejml', name: 'ejml-all', version: '0.41'
+    implementation group: 'org.joml', name: 'joml', version: '1.10.4'
 }
 
 test {

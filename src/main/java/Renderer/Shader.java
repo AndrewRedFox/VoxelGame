@@ -15,7 +15,7 @@ public class Shader {
         glCompileShader(fragmentShader);
 
         id = glCreateProgram();
-        System.out.println(id);
+        //System.out.println(id);
         glAttachShader(id, vertexShader);
         glAttachShader(id, fragmentShader);
         glLinkProgram(id);
