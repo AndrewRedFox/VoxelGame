@@ -4,14 +4,11 @@ import core.GameEngine.GameCore.Vector3D;
 
 public class MBO {
     public Voxel[] voxels;
-    private float x, y, z;
     private Vector3D vector3D = new Vector3D();//*
     private float angleX, angleY, angleZ;
-    public MBO(Voxel[] voxels, float x, float y, float z, float angleX, float angleY, float angleZ){
+    public MBO(Voxel[] voxels, Vector3D vector3D, float angleX, float angleY, float angleZ){
         this.voxels = voxels;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.vector3D = vector3D;
         this.angleX = angleX;
         this.angleY = angleY;
         this.angleZ = angleZ;
@@ -36,27 +33,15 @@ public class MBO {
     }
 
     public float getX() {
-        return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
+        return vector3D.x;
     }
 
     public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
+        return vector3D.y;
     }
 
     public float getZ() {
-        return z;
-    }
-
-    public void setZ(float z) {
-        this.z = z;
+        return vector3D.z;
     }
 
     public float getAngleX() {
