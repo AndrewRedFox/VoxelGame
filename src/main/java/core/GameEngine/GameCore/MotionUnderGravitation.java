@@ -5,7 +5,7 @@ public class MotionUnderGravitation extends Simulation { // создает ма�
     Vector3D gravitaion; //ускорение свободного падения
 
     public MotionUnderGravitation(Vector3D gravitaion) {
-        super(1, 1.0f);
+        //super(1, 1.0f);
         this.gravitaion = gravitaion;
         masses[0].pos = new Vector3D(-10.0f, 0.0f, 0.0f);
         masses[0].vel = new Vector3D(10.0f, 15.0f, 0.0f);

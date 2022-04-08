@@ -6,7 +6,7 @@ public class Simulation { //massive для симуляции масс
     public Mass[] masses;
 
     // Конструктор создает numOfMasses масс с массой m.
-    public Simulation(int numOfMasses, float m) {
+    /*public Simulation(int numOfMasses, float m) {
         this.numOfMasses = numOfMasses;
         masses[numOfMasses] = new Mass();
 
@@ -48,6 +48,6 @@ public class Simulation { //massive для симуляции масс
         init();            // 1. Силу в 0
         solve();           // 2. Применяем силы
         simulate(dt);      // 3. Процедура
-    }
+    }*/
 
 }

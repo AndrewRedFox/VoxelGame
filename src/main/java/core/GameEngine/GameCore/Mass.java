@@ -1,20 +1,27 @@
 package core.GameEngine.GameCore;
 
+import core.GameEngine.MBO;
 import jglm.Vec;
 
 public class Mass {
 
     public float m; //значение массы
-    public Vector3D pos; //положение в пространстве
-    public Vector3D vel; //скорость
-    public Vector3D force; //воздействующая сила
+    public Vector3D pos = new Vector3D(); //положение в пространстве
+    public Vector3D vel = new Vector3D(); //скорость
+    public Vector3D force = new Vector3D(); //воздействующая сила
+    public MBO object = new MBO();
 
-    public Mass(float m) {
+    public Mass(float m, MBO object) {
         this.m = m;
+        this.object = object;
     }
 
     public Mass() {
         m = 0;
+    }
+
+    public void rePosition() {
+        this.pos.change(object.getVector3D());
     }
 
     public void applyForce(Vector3D force) { // Внешнюю силу прибавляем к «нашей»
@@ -27,13 +34,16 @@ public class Mass {
         force.z = 0;
     }
 
-    public void simulate(float dt){ //dt это время
-        vel.plusAndEqualsOperator((force.divideOperator(m)).multiplyOperator(dt)); //изменение скорости
-        pos.plusAndEqualsOperator(vel.multiplyOperator(dt)); //изменение положения
+    public Vector3D getObj() {
+        return pos;
     }
 
-
-
+    public void simulate(float dt) { //dt это время
+        rePosition();
+        vel.plusAndEqualsOperator((force.divideOperator(m)).multiplyOperator(dt)); //изменение скорости
+        pos.plusAndEqualsOperator(vel.multiplyOperator(dt)); //изменение положения
+        object.setVector3D(pos);
+    }
 
 
 }

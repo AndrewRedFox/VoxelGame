@@ -6,7 +6,7 @@ public class MassConnectedWithSpring extends Simulation { // устанавли�
     public Vector3D connectionPos; // Точка
 
     public MassConnectedWithSpring(float springConstant) {
-        super(1, 1.0f);
+        //super(1, 1.0f);
         this.springConstant = springConstant;
         connectionPos.equalsOperator(new Vector3D(0.0f, -5.0f, 0.0f));
 
@@ -15,7 +15,6 @@ public class MassConnectedWithSpring extends Simulation { // устанавли�
     }
 
     public void solve() { //применяем силу пружины
-
         for (int i = 0; i < numOfMasses; ++i) {
             Vector3D springVector = masses[i].pos;
             masses[i].applyForce(springVector.multiplyOperator(springConstant).multiplyOperator(-1.0f));
