@@ -9,7 +9,8 @@ import static org.lwjgl.opengl.GL33.*;
 
 public class Texture {
     private final int texture;
-    Texture(String path){
+
+    Texture(String path) {
 
         texture = glGenTextures();
         glActiveTexture(texture);
@@ -30,8 +31,8 @@ public class Texture {
             image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
             ByteBuffer buffer = ByteBuffer.allocateDirect(image.getWidth() * image.getHeight() * 4);
 
-            for(int h = 0; h < image.getHeight(); h++) {
-                for(int w = 0; w < image.getWidth(); w++) {
+            for (int h = 0; h < image.getHeight(); h++) {
+                for (int w = 0; w < image.getWidth(); w++) {
                     int pixel = pixels[(image.getHeight() - 1 - h) * image.getWidth() + w];
 
                     buffer.put((byte) ((pixel >> 16) & 0xFF));
@@ -53,21 +54,21 @@ public class Texture {
         unbind();
     }
 
-    public void texUnit(Shader shader, String uniform, int unit){
+    public void texUnit(Shader shader, String uniform, int unit) {
         int tex0Uni = glGetUniformLocation(shader.getId(), uniform);
         shader.activate();
         glUniform1i(tex0Uni, unit);
     }
 
-    public void bind(){
+    public void bind() {
         glBindTexture(GL_TEXTURE_2D, texture);
     }
 
-    public void unbind(){
+    public void unbind() {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    public void delete(){
+    public void delete() {
         glDeleteTextures(texture);
     }
 }

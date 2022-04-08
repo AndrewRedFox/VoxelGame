@@ -5,22 +5,27 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class VAO {
     private int id;
-    VAO(){
+
+    VAO() {
         id = glGenVertexArrays();
     }
-    void LinkAttrib(VBO vbo, int layout, int offset, int pointer){
+
+    void LinkAttrib(VBO vbo, int layout, int offset, int pointer) {
         vbo.bind();
-        glVertexAttribPointer(layout, vbo.getVerticesSize(), GL_FLOAT, false, offset, pointer);
+        glVertexAttribPointer(layout, GraphicsDisplay.vertexSize, GL_FLOAT, false, offset, pointer);
         glEnableVertexAttribArray(layout);
         vbo.unbind();
     }
-    void bind(){
+
+    void bind() {
         glBindVertexArray(id);
     }
-    void unbind(){
+
+    void unbind() {
         glBindVertexArray(0);
     }
-    void delete(){
+
+    void delete() {
         glDeleteVertexArrays(id);
     }
 }

@@ -1,4 +1,5 @@
 package Renderer;
+
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.*;
@@ -15,6 +16,7 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 public class GraphicsDisplay {
+    public static final int vertexSize = 4;
     private long window;
     private final int height;
     private final int width;
@@ -25,9 +27,9 @@ public class GraphicsDisplay {
             layout (location = 0) in vec3 aPos;
             layout (location = 1) in vec2 aTex;
             out vec2 texCoord;
-            
+                        
             uniform mat4 camMatrix;
-            
+                        
             void main()
             {
                 gl_Position = camMatrix * vec4(aPos, 1.0f);
@@ -46,11 +48,12 @@ public class GraphicsDisplay {
             }
             """;
 
-    public GraphicsDisplay(int width, int height, String name){
+    public GraphicsDisplay(int width, int height, String name) {
         this.height = height;
         this.width = width;
         this.name = name;
     }
+
     public void run() {
         System.out.println("GraphicsDisplay has launched with LWJGL " + Version.getVersion());
 
@@ -72,7 +75,7 @@ public class GraphicsDisplay {
         GLFWErrorCallback.createPrint(System.err).set();
 
         // Initialize GLFW. Most GLFW functions will not work before doing this.
-        if ( !glfwInit() )
+        if (!glfwInit())
             throw new IllegalStateException("Unable to initialize GLFW");
 
         // Configure GLFW
@@ -82,17 +85,17 @@ public class GraphicsDisplay {
 
         // Create the window
         window = glfwCreateWindow(width, height, name, NULL, NULL);
-        if ( window == NULL )
+        if (window == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
 
         // Set up a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
         });
 
         // Get the thread stack and push a new frame
-        try ( MemoryStack stack = stackPush() ) {
+        try (MemoryStack stack = stackPush()) {
             IntBuffer pWidth = stack.mallocInt(1); // int*
             IntBuffer pHeight = stack.mallocInt(1); // int*
 
@@ -129,34 +132,59 @@ public class GraphicsDisplay {
 
         // Set the clear color
         glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-        /*
-        float[] vertices = {
-                -0.5f,  0.0f,  0.5f,    0.0f, 0.0f,
-                -0.5f,  0.0f, -0.5f,    1.0f, 1.0f,
-                 0.5f,  0.0f, -0.5f,    2.0f, 2.0f,
-                 0.5f,  0.0f,  0.5f,    3.0f, 3.0f,
-                 0.0f,  0.8f,  0.0f,    4.5f, 4.0f
-        };
 
-        int[] indices = {
-                0, 1, 2,
-                0, 2, 3,
-                0, 1, 4,
-                1, 2, 4,
-                2, 3, 4,
-                3, 0, 4
-        };*/
+        glEnable(GL_DEPTH_TEST);
 
         float[] vertices = {
-                -0.5f, -0.5f,  0.0f,    0.0f, 0.0f,
-                -0.5f,  0.5f,  0.0f,    0.0f, 1.0f,
-                 0.5f,  0.5f,  0.0f,    1.0f, 1.0f,
-                 0.5f, -0.5f,  0.0f,    1.0f, 0.0f,
+                0f,  0f,  0f,     0.0f, 0.0f,
+                0f,  1f,  0f,     0.0f, 1.0f,
+                1f,  1f,  0f,     1.0f, 1.0f,
+                1f,  0f,  0f,     1.0f, 0.0f,
+
+                1f,  0f,  0f,     0.0f, 0.0f,
+                1f,  1f,  0f,     0.0f, 1.0f,
+                1f,  1f,  -1f,     1.0f, 1.0f,
+                1f,  0f,  -1f,     1.0f, 0.0f,
+
+                0f,  0f,  0f,     1.0f, 0.0f,
+                0f,  1f,  0f,     1.0f, 1.0f,
+                0f,  1f,  -1f,     0.0f, 1.0f,
+                0f,  0f,  -1f,     0.0f, 0.0f,
+
+                0f,  0f,  -1f,     1.0f, 0.0f,
+                0f,  1f,  -1f,     1.0f, 1.0f,
+                1f,  1f,  -1f,     0.0f, 1.0f,
+                1f,  0f,  -1f,     0.0f, 0.0f,
+
+                0f,  0f,  0f,     1.0f, 0.0f,
+                0f,  0f,  -1f,     1.0f, 1.0f,
+                1f,  0f,  -1f,     0.0f, 1.0f,
+                1f,  0f,  0f,     0.0f, 0.0f,
+
+                0f,  1f,  0f,     1.0f, 0.0f,
+                0f,  1f,  -1f,     1.0f, 1.0f,
+                1f,  1f,  -1f,     0.0f, 1.0f,
+                1f,  1f,  0f,     0.0f, 0.0f,
         };
 
         int[] indices = {
                 0, 2, 1,
-                0, 3, 2
+                0, 3, 2,
+
+                0 + 4, 2 + 4, 1 + 4,
+                0 + 4, 3 + 4, 2 + 4,
+
+                0 + 8, 2 + 8, 1 + 8,
+                0 + 8, 3 + 8, 2 + 8,
+
+                0 + 12, 2 + 12, 1 + 12,
+                0 + 12, 3 + 12, 2 + 12,
+
+                0 + 16, 2 + 16, 1 + 16,
+                0 + 16, 3 + 16, 2 + 16,
+
+                0 + 20, 2 + 20, 1 + 20,
+                0 + 20, 3 + 20, 2 + 20,
         };
 
 
@@ -180,7 +208,7 @@ public class GraphicsDisplay {
         Camera camera = new Camera(width, height, new Vector3f(0.0f, 0.0f, 2.0f));
 
         float rotation = 0.0f;
-        while ( !glfwWindowShouldClose(window) ) {
+        while (!glfwWindowShouldClose(window)) {
             glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
@@ -188,20 +216,6 @@ public class GraphicsDisplay {
 
             camera.Inputs(window);
             camera.Matrix(45.0f, 0.1f, 100.0f, shader, "camMatrix");
-            /*Matrix4f model = new Matrix4f();
-            Matrix4f view = new Matrix4f();
-            Matrix4f proj = new Matrix4f();
-
-            model = model.rotate(rotation, 0.0f, 1.0f, 0.0f);
-            //rotation = (rotation+0.01f)%(3.1415f*2.0f);
-            view = view.translate(new Vector3f(0.0f, -0.5f, -2.0f));
-            proj = proj.perspective(3.1415f/4.0f, (float) (width/height), 0.1f, 100.0f );
-
-            int camLoc = glGetUniformLocation(shader.getId(), "camMatrix");
-
-            try (MemoryStack stack = MemoryStack.stackPush()) {
-                glUniformMatrix4fv(camLoc, false, proj.mul(view).mul(model).get(stack.mallocFloat(16)));
-            } catch (Exception e) { System.out.println(e + " error"); }*/
 
             texture.bind();
             vertexArrayObject.bind();

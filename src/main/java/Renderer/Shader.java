@@ -5,13 +5,14 @@ import static org.lwjgl.opengl.GL33.*;
 
 public class Shader {
     private int id;
-    Shader(String vertexString, String fragmentString){
+
+    Shader(String vertexString, String fragmentString) {
         int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShader,  vertexString);
+        glShaderSource(vertexShader, vertexString);
         glCompileShader(vertexShader);
 
         int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragmentShader,  fragmentString);
+        glShaderSource(fragmentShader, fragmentString);
         glCompileShader(fragmentShader);
 
         id = glCreateProgram();
@@ -23,11 +24,16 @@ public class Shader {
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
     }
-    int getId() { return id;}
-    void activate(){
+
+    int getId() {
+        return id;
+    }
+
+    void activate() {
         glUseProgram(id);
     }
-    void delete(){
+
+    void delete() {
         glDeleteProgram(id);
     }
 }
