@@ -1,5 +1,7 @@
 package Renderer;
 
+import core.GameEngine.GameCore.SimulationSimple;
+import core.GameEngine.GameCore.Vector3D;
 import core.GameEngine.MBO;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -27,11 +29,14 @@ public class GraphicsDisplay {
     private double currentTime = 0.0;
     private double lastTime = 0.0;
     private final String name;
+    public MBO object = new MBO(new Vector3D(4.0f, 1000.0f, 5.0f));
+    public SimulationSimple simulate = new SimulationSimple(2.0f, object);
 
-    private void printRenderTime(){
+
+    private void printRenderTime() {
         frames++;
         currentTime = glfwGetTime();
-        if(currentTime - lastTime > 1.0) {
+        if (currentTime - lastTime > 1.0) {
             System.out.println(frames);
             lastTime = currentTime;
             frames = 0;
@@ -139,7 +144,7 @@ public class GraphicsDisplay {
         glfwShowWindow(window);
     }
 
-    private int countVoxels (MBO[] mboS) {
+    private int countVoxels(MBO[] mboS) {
         int sum = 0;
         for (MBO mbo : mboS) sum += mbo.voxels.length;
         return sum;
@@ -226,8 +231,10 @@ public class GraphicsDisplay {
                 }
                 idVoxel++;
             }
+            simulate.setObject(mbo);
+            simulate.operate();
+            mbo.setVector3D(simulate.getObject());
         }
-
 
 
         Shader shader = new Shader(vertexShaderSource, fragmentShaderSource);
