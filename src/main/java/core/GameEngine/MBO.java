@@ -7,8 +7,7 @@ public class MBO {
     private float x, y, z;
     private Vector3D vector3D = new Vector3D();//*
     private float angleX, angleY, angleZ;
-
-    MBO(Voxel[] voxels, float x, float y, float z, float angleX, float angleY, float angleZ) {
+    MBO(Voxel[] voxels, float x, float y, float z, float angleX, float angleY, float angleZ){
         this.voxels = voxels;
         this.x = x;
         this.y = y;
