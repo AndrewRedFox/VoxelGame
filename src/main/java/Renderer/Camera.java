@@ -9,18 +9,21 @@ import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 
 public class Camera {
-    public Vector3f position, orientation, up;
-    public int width, height;
+    private final Vector3f up;
+    public Vector3f position, orientation;
+    public final int width, height;
     public float speed = 0.1f, sensitivity = 100.0f;
     private static final float pi = 3.14159265359f;
     private boolean firstClick;
+    private final GraphicsDisplay graphicsDisplay;
 
-    Camera(int width, int height, Vector3f position) {
+    Camera(int width, int height, Vector3f position, GraphicsDisplay graphicsDisplay) {
         orientation = new Vector3f(0.0f, 0.0f, -1.0f);
         up = new Vector3f(0.0f, 1.0f, 0.0f);
         this.height = height;
         this.width = width;
         this.position = position;
+        this.graphicsDisplay = graphicsDisplay;
         firstClick = true;
     }
 
@@ -42,22 +45,22 @@ public class Camera {
     }
 
     void Inputs(long window) {
+        if(glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
+            graphicsDisplay.toClose = true;
+            glfwSetWindowShouldClose(window, true);
+        }
+
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            Vector3f delta = new Vector3f().add(orientation).mul(speed);
-            position.add(delta);
-            //System.out.println(orientation);
+            position.add(new Vector3f(orientation).mul(speed));
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            Vector3f delta = new Vector3f().add(orientation).mul(-speed);
-            position.add(delta);
+            position.add(new Vector3f(orientation).mul(-speed));
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            Vector3f delta = new Vector3f().add(orientation).cross(up).normalize().mul(speed);
-            position.add(delta);
+            position.add(new Vector3f(orientation).cross(up).normalize().mul(speed));
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            Vector3f delta = new Vector3f().add(orientation).cross(up).normalize().mul(-speed);
-            position.add(delta);
+            position.add(new Vector3f(orientation).cross(up).normalize().mul(-speed));
         }
 
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
@@ -71,10 +74,16 @@ public class Camera {
             float rotX = sensitivity * (float) (mouseY[0] - height / 2.0) / height;
             float rotY = sensitivity * (float) (mouseX[0] - width / 2.0) / width;
 
-            Vector3f newOrientation = new Vector3f();
+            Vector3f newOrientation = new Vector3f(orientation);
 
-            newOrientation.add(orientation).rotateX(-rotX / 180.0f * pi).rotateY(-rotY / 180.0f * pi);
-            orientation = new Vector3f().add(newOrientation);
+
+            newOrientation.rotateY(-rotY / 180.0f * pi);
+            newOrientation.rotateX((float) (rotX / 180.0f * Math.sin(orientation.z * pi / 2.0) * pi));
+            newOrientation.rotateZ((float) (-rotX / 180.0f * Math.sin(orientation.x * pi / 2.0) * pi));
+
+            if(newOrientation.angle(up) > 5.0 / 180.0 * pi && newOrientation.angle(up) < 175.0 / 180.0 * pi){
+                orientation = new Vector3f(newOrientation);
+            }
 
             glfwSetCursorPos(window, width / 2.0f, height / 2.0f);
         }
