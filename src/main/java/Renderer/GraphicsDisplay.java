@@ -28,8 +28,6 @@ public class GraphicsDisplay {
     private double lastTime = 0.0;
     private final String name;
     private Launcher launcher;
-    //public MBO object = new MBO(new Vector3D(4.0f, 1000.0f, 5.0f));
-    //public SimulationSimple simulate = new SimulationSimple(2.0f, object);
 
 
     private void printRenderTime() {
@@ -152,7 +150,7 @@ public class GraphicsDisplay {
 
         Shader shader = new Shader(vertexShaderSource, fragmentShaderSource);
 
-        Texture texture = new Texture("picture2.png");
+        Texture texture = new Texture("picture.png");
         texture.texUnit(shader, "tex0", 0);
 
         Camera camera = new Camera(width, height, new Vector3f(0.0f, 0.0f, 2.0f), this);
