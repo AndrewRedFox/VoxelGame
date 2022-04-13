@@ -1,8 +1,6 @@
 package Renderer;
 
-import core.GameEngine.GameCore.SimulationSimple;
-import core.GameEngine.GameCore.Vector3D;
-import core.GameEngine.MBO;
+import core.Launcher;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.*;
@@ -22,7 +20,6 @@ public class GraphicsDisplay {
     public static final int vertexSize = 4;
     public static final float voxelSize = 2.0f;
     private long window;
-    private MBO[] MBOs;
     private final int height;
     private final int width;
     private int frames = 0;
@@ -30,6 +27,7 @@ public class GraphicsDisplay {
     public boolean toClose = false;
     private double lastTime = 0.0;
     private final String name;
+    private Launcher launcher;
     //public MBO object = new MBO(new Vector3D(4.0f, 1000.0f, 5.0f));
     //public SimulationSimple simulate = new SimulationSimple(2.0f, object);
 
@@ -70,11 +68,11 @@ public class GraphicsDisplay {
             }
             """;
 
-    public GraphicsDisplay(int width, int height, String name, MBO[] MBOs) {
+    public GraphicsDisplay(int width, int height, String name, Launcher launcher) {
         this.height = height;
         this.width = width;
         this.name = name;
-        this.MBOs = MBOs;
+        this.launcher = launcher;
     }
 
     public void run() {
@@ -113,8 +111,7 @@ public class GraphicsDisplay {
 
         // Set up a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if ((key == GLFW_KEY_ESCAPE || key == GLFW_KEY_Q) && action == GLFW_RELEASE)
-            {
+            if ((key == GLFW_KEY_ESCAPE || key == GLFW_KEY_Q) && action == GLFW_RELEASE) {
                 glfwSetWindowShouldClose(window, true);
                 toClose = true;
             }
@@ -148,195 +145,42 @@ public class GraphicsDisplay {
         glfwShowWindow(window);
     }
 
-    private int countVoxels(MBO[] mboS) {
-        int sum = 0;
-        for (MBO mbo : mboS) sum += mbo.voxels.length;
-        return sum;
-    }
-
     private void loop() {
-        // This line is critical for LWJGL's interoperation with GLFW's
-        // OpenGL context, or any context that is managed externally.
-        // LWJGL detects the context that is current in the current thread,
-        // creates the GLCapabilities instance and makes the OpenGL
-        // bindings available for use.
         GL.createCapabilities();
-
-        // Set the clear color
         glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-
         glEnable(GL_DEPTH_TEST);
-
-        int mboSLength = countVoxels(MBOs);
-        float[] vertices = new float[mboSLength * 120];
-        int[] indices = new int[mboSLength * 36];
-        //int idVoxel = 0;
-        /*for (MBO mbo : MBOs) {
-            System.out.println("in gui " + mbo.getX() + " " + mbo.getY() + " " + mbo.getZ());
-            for (int k = 0; k < mbo.voxels.length; k++) {
-                float[] verticesTemp = {
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 0.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 1.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 1.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 0.0f,
-
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 0.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 1.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 1.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 0.0f,
-
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 0.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 1.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 1.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 0.0f,
-
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 0.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 1.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 1.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 0.0f,
-
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 0.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 1.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 1.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 0.0f,
-
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 0.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 1.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 1.0f,
-                        mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 0.0f,
-
-                };
-
-                int[] indicesTemp = {
-                        0, 2, 1,
-                        0, 3, 2,
-
-                        4, 6, 5,
-                        4, 7, 6,
-
-                        8, 10, 9,
-                        8, 11, 10,
-
-                        12, 14, 13,
-                        12, 15, 14,
-
-                        16, 18, 17,
-                        16, 19, 18,
-
-                        20, 22, 21,
-                        20, 23, 22
-                };
-
-                for (int j = 0; j < 120; j++) {
-                    vertices[idVoxel * 120 + j] = verticesTemp[j];
-                }
-                for (int j = 0; j < 36; j++) {
-                    indices[idVoxel * 36 + j] = indicesTemp[j] + idVoxel * 24;
-                }
-                idVoxel++;
-            }
-            //simulate.setObject(mbo);
-            //simulate.operate();
-            //mbo.setVector3D(simulate.getObject());
-        }*/
-
 
         Shader shader = new Shader(vertexShaderSource, fragmentShaderSource);
 
-        /*VAO vertexArrayObject = new VAO();
-        vertexArrayObject.bind();
+        Texture texture = new Texture("picture2.png");
+        texture.texUnit(shader, "tex0", 0);
 
-        VBO vertexBufferObject = new VBO(vertices);
-        EBO elementBufferObject = new EBO(indices);
+        Camera camera = new Camera(width, height, new Vector3f(0.0f, 0.0f, 2.0f), this);
+
+        ArrayContainer arrayContainer = new ArrayContainer(launcher);
+
+        VAO vertexArrayObject = new VAO();
+        vertexArrayObject.bind();
+        VBO vertexBufferObject = new VBO(arrayContainer);
+        EBO elementBufferObject = new EBO(arrayContainer);
 
         vertexArrayObject.LinkAttrib(vertexBufferObject, 0, 20, 0);
         vertexArrayObject.LinkAttrib(vertexBufferObject, 1, 20, 12);
+
         vertexArrayObject.unbind();
         vertexBufferObject.unbind();
-        elementBufferObject.unbind();*/
+        elementBufferObject.unbind();
 
-        Texture texture = new Texture("picture.png");
-        texture.texUnit(shader, "tex0", 0);
-
-        Camera camera = new Camera(width, height, new Vector3f(0.0f, 0.0f, 2.0f));
-
-        float rotation = 0.0f;
         while (!glfwWindowShouldClose(window)) {
-            int idVoxel = 0;
-            for (MBO mbo : MBOs) {
-                //System.out.println("in gui " + mbo.getX() + " " + mbo.getY() + " " + mbo.getZ());
-                for (int k = 0; k < mbo.voxels.length; k++) {
-                    float[] verticesTemp = {
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 0.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 1.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 1.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 0.0f,
+            arrayContainer.refreshMBOS();
 
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 0.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 1.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 1.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 0.0f,
-
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 0.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 1.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 1.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 0.0f,
-
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 0.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 1.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 1.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 0.0f,
-
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 0.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 1.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 1.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 0.0f,
-
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 1.0f, 0.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 1.0f, 1.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize - voxelSize, 0.0f, 1.0f,
-                            mbo.getX() + mbo.voxels[k].getX() * voxelSize + voxelSize, mbo.getY() + mbo.voxels[k].getY() * voxelSize + voxelSize, mbo.getZ() + mbo.voxels[k].getZ() * voxelSize, 0.0f, 0.0f,
-
-                    };
-
-                    int[] indicesTemp = {
-                            0, 2, 1,
-                            0, 3, 2,
-
-                            4, 6, 5,
-                            4, 7, 6,
-
-                            8, 10, 9,
-                            8, 11, 10,
-
-                            12, 14, 13,
-                            12, 15, 14,
-
-                            16, 18, 17,
-                            16, 19, 18,
-
-                            20, 22, 21,
-                            20, 23, 22
-                    };
-
-                    for (int j = 0; j < 120; j++) {
-                        vertices[idVoxel * 120 + j] = verticesTemp[j];
-                    }
-                    for (int j = 0; j < 36; j++) {
-                        indices[idVoxel * 36 + j] = indicesTemp[j] + idVoxel * 24;
-                    }
-                    idVoxel++;
-                }
-            }
-
-            VAO vertexArrayObject = new VAO();
             vertexArrayObject.bind();
-
-            VBO vertexBufferObject = new VBO(vertices);
-            EBO elementBufferObject = new EBO(indices);
+            vertexBufferObject.bindRefresh();
+            elementBufferObject.bindRefresh();
 
             vertexArrayObject.LinkAttrib(vertexBufferObject, 0, 20, 0);
             vertexArrayObject.LinkAttrib(vertexBufferObject, 1, 20, 12);
+
             vertexArrayObject.unbind();
             vertexBufferObject.unbind();
             elementBufferObject.unbind();
@@ -352,21 +196,19 @@ public class GraphicsDisplay {
 
             texture.bind();
             vertexArrayObject.bind();
+
             printRenderTime();
-            glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, arrayContainer.indices.length, GL_UNSIGNED_INT, 0);
 
             glfwSwapBuffers(window);
             glfwPollEvents();
-
-            vertexArrayObject.delete();
-            vertexBufferObject.delete();
-            elementBufferObject.delete();
         }
-        /*vertexArrayObject.delete();
+        vertexArrayObject.delete();
         vertexBufferObject.delete();
-        elementBufferObject.delete();*/
+        elementBufferObject.delete();
         texture.delete();
         shader.delete();
+        toClose = true;
     }
 
 }
