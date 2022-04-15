@@ -150,7 +150,7 @@ public class GraphicsDisplay {
 
         Shader shader = new Shader(vertexShaderSource, fragmentShaderSource);
 
-        Texture texture = new Texture("picture.png");
+        Texture texture = new Texture("picture3.png", 1024, 512);
         texture.texUnit(shader, "tex0", 0);
 
         Camera camera = new Camera(width, height, new Vector3f(0.0f, 0.0f, 2.0f), this);

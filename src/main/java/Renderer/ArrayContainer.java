@@ -54,44 +54,44 @@ public class ArrayContainer {
 
         float[] verticesTemp = {
 
-                voxelX,             voxelY,             voxelZ,             0.0f, 0.0f,
+                voxelX,             voxelY,             voxelZ,             0.0f, 0.5f,
                 voxelX,             voxelY + voxelSize, voxelZ,             0.0f, 1.0f,
-                voxelX + voxelSize, voxelY + voxelSize, voxelZ,             1.0f, 1.0f,
-                voxelX + voxelSize, voxelY,             voxelZ,             1.0f, 0.0f
+                voxelX + voxelSize, voxelY + voxelSize, voxelZ,             0.25f, 1.0f,
+                voxelX + voxelSize, voxelY,             voxelZ,             0.25f, 0.5f
                 ,
 
 
-                voxelX + voxelSize, voxelY,             voxelZ,             0.0f, 0.0f,
-                voxelX + voxelSize, voxelY + voxelSize, voxelZ,             0.0f, 1.0f,
-                voxelX + voxelSize, voxelY + voxelSize, voxelZ - voxelSize, 1.0f, 1.0f,
-                voxelX + voxelSize, voxelY,             voxelZ - voxelSize, 1.0f, 0.0f
+                voxelX + voxelSize, voxelY,             voxelZ,             0.5f, 0.5f,
+                voxelX + voxelSize, voxelY + voxelSize, voxelZ,             0.5f, 1.0f,
+                voxelX + voxelSize, voxelY + voxelSize, voxelZ - voxelSize, 0.75f, 1.0f,
+                voxelX + voxelSize, voxelY,             voxelZ - voxelSize, 0.75f, 0.5f
                 ,
 
 
-                voxelX,             voxelY,             voxelZ,             1.0f, 0.0f,
+                voxelX,             voxelY,             voxelZ,             1.0f, 0.5f,
                 voxelX,             voxelY + voxelSize, voxelZ,             1.0f, 1.0f,
-                voxelX,             voxelY + voxelSize, voxelZ - voxelSize, 0.0f, 1.0f,
-                voxelX,             voxelY,             voxelZ - voxelSize, 0.0f, 0.0f
+                voxelX,             voxelY + voxelSize, voxelZ - voxelSize, 0.75f, 1.0f,
+                voxelX,             voxelY,             voxelZ - voxelSize, 0.75f, 0.5f
                 ,
 
 
-                voxelX,             voxelY,             voxelZ - voxelSize, 1.0f, 0.0f,
-                voxelX,             voxelY + voxelSize, voxelZ - voxelSize, 1.0f, 1.0f,
-                voxelX + voxelSize, voxelY + voxelSize, voxelZ - voxelSize, 0.0f, 1.0f,
-                voxelX + voxelSize, voxelY,             voxelZ - voxelSize, 0.0f, 0.0f
+                voxelX,             voxelY,             voxelZ - voxelSize, 0.5f, 0.5f,
+                voxelX,             voxelY + voxelSize, voxelZ - voxelSize, 0.5f, 1.0f,
+                voxelX + voxelSize, voxelY + voxelSize, voxelZ - voxelSize, 0.25f, 1.0f,
+                voxelX + voxelSize, voxelY,             voxelZ - voxelSize, 0.25f, 0.5f
                 ,
 
 
-                voxelX,             voxelY,             voxelZ,             1.0f, 0.0f,
-                voxelX,             voxelY,             voxelZ - voxelSize, 1.0f, 1.0f,
-                voxelX + voxelSize, voxelY,             voxelZ - voxelSize, 0.0f, 1.0f,
-                voxelX + voxelSize, voxelY,             voxelZ,             0.0f, 0.0f
+                voxelX,             voxelY,             voxelZ,             0.5f, 0.0f,
+                voxelX,             voxelY,             voxelZ - voxelSize, 0.5f, 0.5f,
+                voxelX + voxelSize, voxelY,             voxelZ - voxelSize, 0.25f, 0.5f,
+                voxelX + voxelSize, voxelY,             voxelZ,             0.25f, 0.0f
                 ,
 
 
-                voxelX,             voxelY + voxelSize, voxelZ,             1.0f, 0.0f,
-                voxelX,             voxelY + voxelSize, voxelZ - voxelSize, 1.0f, 1.0f,
-                voxelX + voxelSize, voxelY + voxelSize, voxelZ - voxelSize, 0.0f, 1.0f,
+                voxelX,             voxelY + voxelSize, voxelZ,             0.25f, 0.0f,
+                voxelX,             voxelY + voxelSize, voxelZ - voxelSize, 0.25f, 0.5f,
+                voxelX + voxelSize, voxelY + voxelSize, voxelZ - voxelSize, 0.0f, 0.5f,
                 voxelX + voxelSize, voxelY + voxelSize, voxelZ,             0.0f, 0.0f
 
         };
