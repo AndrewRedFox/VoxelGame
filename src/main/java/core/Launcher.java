@@ -15,9 +15,9 @@ import java.util.Random;
 public class Launcher {
     private final GraphicsDisplay graphicsDisplay;
     private long delay = -1L;
-    public MBO object;
-    public SimulationSimple simulate = new SimulationSimple(2.0f, object);
-    public MBO[] mbos;
+   // public MBO object;
+    //public SimulationSimple simulate = new SimulationSimple(2.0f, object);
+    //public MBO[] mbos;
     //GraphicsDisplay graphicsDisplay;
     public PhysicsCore physicsCore = new PhysicsCore();
 
@@ -27,9 +27,9 @@ public class Launcher {
     }*/
 
     Launcher() {
-        /*mbos = new MBO[]{
+       /* mbos = new MBO[]{
                 object,
-                new MBO(MBO.genVoxelArray(10000), new Vector3D(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f),
+                new MBO(MBO.genVoxelArray(10), new Vector3D(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f),
         };
         object = new MBO(MBO.genVoxelArray(2), new Vector3D(0.0f, 0.0f, -10.0f), 0.0f, 0.0f, 0.0f);*/
         graphicsDisplay = new GraphicsDisplay(1080, 1080, "VoxelGame", this);
@@ -37,17 +37,19 @@ public class Launcher {
         physicsCore.setGraphicsDisplay(graphicsDisplay);
     }
 
-    /*public Launcher(MBO[] mbos, MBO object, long delay) {
-        this.mbos = mbos;
-        this.object = object;
+    public Launcher(MBO[] mbos, MBO object, long delay) {
+        //this.mbos = mbos;
+       // this.object = object;
         this.graphicsDisplay = new GraphicsDisplay(1080, 1080, "VoxelGame", this);
         this.delay = delay;
+        physicsCore.setGraphicsDisplay(graphicsDisplay);
     }
 
     public Launcher(MBO[] mbos) {
-        this.mbos = mbos;
+       // this.mbos = mbos;
         this.graphicsDisplay = new GraphicsDisplay(1080, 1080, "VoxelGame", this);
-    }*/
+        physicsCore.setGraphicsDisplay(graphicsDisplay);
+    }
 
     public boolean toClose() {
         return graphicsDisplay.toClose;
@@ -59,7 +61,7 @@ public class Launcher {
 
 
     public void run() {
-        //runSimulation();
+       // runSimulation();
         runGUI();
         physicsCore.run();
     }
@@ -70,14 +72,14 @@ public class Launcher {
         System.out.println("close gui");
     }
 
-    /*public void runSimulation() {
+   /* public void runSimulation() {
         if (object == null) throw new IllegalStateException("object is null");
         if (delay < 1) throw new IllegalStateException("incorrect delay");
         Thread thread = new Thread(() -> {
             System.out.println("Start runSim");
             while (!graphicsDisplay.toClose) {
                 simulate.setObject(object);
-                simulate.operate();
+                simulate.operate(object);
                 object.setVector3D(simulate.getObject());
                 try {
                     Thread.sleep(delay);
@@ -90,9 +92,6 @@ public class Launcher {
         thread.start();
     }*/
 
-    /*public void run() {
-        physicsCore.run();
-    }*/
 
 }
 

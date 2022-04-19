@@ -34,7 +34,7 @@ public class MBO {
         }
     }
 
-    public static Voxel[] genVoxelArray(int count) {
+    /*public static Voxel[] genVoxelArray(int count) {
         Voxel[] mas = new Voxel[count];
         int[] cord = {0, 0, 0};
         HashSet<Integer> set = new HashSet<>();
@@ -48,7 +48,7 @@ public class MBO {
             }
         }
         return mas;
-    }
+    }*/
 
     public MBO(Vector3D vector3D) {
         this.vector3D = vector3D;

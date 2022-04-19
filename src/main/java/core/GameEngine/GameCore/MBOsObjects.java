@@ -9,7 +9,7 @@ import java.util.Random;
 public class MBOsObjects {
     public static MBO object = new MBO(genVoxelArray(1), new Vector3D(2.0f, 50.0f, 0.0f), 0.0f, 0.0f, 0.0f);
     public static MBO[] mas = new MBO[]{
-            new MBO(genVoxelArray(100), new Vector3D(0.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f),
+            new MBO(genVoxelArray(10), new Vector3D(0.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f),
             object
     };
 

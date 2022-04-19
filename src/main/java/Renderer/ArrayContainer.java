@@ -1,5 +1,6 @@
 package Renderer;
 
+import core.GameEngine.GameCore.MBOsObjects;
 import core.GameEngine.MBO;
 import core.GameEngine.Voxel;
 import core.Launcher;
@@ -32,12 +33,12 @@ public class ArrayContainer {
 
     void refreshMBOS(){
         synchronized (launcher) {
-            mboSLength = countVoxels(launcher.mbos);
+            mboSLength = countVoxels(MBOsObjects.getMBOs());//launcher.mbos
             vertices = new float[mboSLength * 20];
             indices = new int[mboSLength * 6];
 
             int idVoxelPart = 0;
-            for (MBO mbo : launcher.mbos) {
+            for (MBO mbo : MBOsObjects.getMBOs()) {//launcher.mbos
                 float mboX = mbo.getX(), mboY = mbo.getY(), mboZ = mbo.getZ();
                 for (Voxel voxel : mbo.voxels) {
                     setMboVertices(voxel, mboX, mboY, mboZ, idVoxelPart);
