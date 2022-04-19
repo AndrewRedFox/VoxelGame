@@ -1,31 +1,25 @@
-import Renderer.GraphicsDisplay;
 import core.GameEngine.GameCore.Vector3D;
 import core.GameEngine.MBO;
-import core.GameEngine.Voxel;
 import core.Launcher;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import javax.imageio.IIOException;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Random;
-
 public class GraphicTests {
+
+    @Test
+    void newTest() {
+        MBO[] mbos = {new MBO(MBO.genVoxelArray(2), new Vector3D(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f)};
+
+        Launcher launcher = new Launcher(mbos, 100L);
+        launcher.run();
+    }
+
     @Test
     void autoTest() {
-        MBO object = new MBO(
-                MBO.genVoxelArray(2),
-                new Vector3D(0.0f, 0.0f, -10.0f), 0.0f, 0.0f, 0.0f
-        );
         MBO[] mbos = {
                 new MBO(MBO.genVoxelArray(2), new Vector3D(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f),
-                object
+                new MBO(MBO.genVoxelArray(2), new Vector3D(0.0f, -10.0f, 0.0f), 0.0f, 0.0f, 0.0f)
         };
-        Launcher launcher = new Launcher(mbos, object, 100l);
+        Launcher launcher = new Launcher(mbos, 50L);
         launcher.run();
     }
 
@@ -39,11 +33,11 @@ public class GraphicTests {
                 new MBO(MBO.genVoxelArray(10000), new Vector3D(0.0f, 0.0f, 400.0f), 0.0f, 0.0f, 0.0f),
                 new MBO(MBO.genVoxelArray(10000), new Vector3D(0.0f, 0.0f, -400.0f), 0.0f, 0.0f, 0.0f)
         };
-        Launcher launcher = new Launcher(mbos);
-        launcher.runGUI();
+        Launcher launcher = new Launcher(mbos, 100L);
+        launcher.run();
     }
 
-    @Test
+    /*@Test
     void cubeGUITest() {
         int n = 48;
         Voxel[] voxels = new Voxel[n * n * n];
@@ -90,5 +84,5 @@ public class GraphicTests {
         );
         thread.start();
         launcher.run();
-    }
+    }*/
 }

@@ -1,5 +1,6 @@
 package Renderer;
 
+import core.GameEngine.PhysicsCore;
 import core.Launcher;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -28,6 +29,7 @@ public class GraphicsDisplay {
     private double lastTime = 0.0;
     private final String name;
     private Launcher launcher;
+    private PhysicsCore physicsCore;
 
 
     private void printRenderTime() {
@@ -66,11 +68,12 @@ public class GraphicsDisplay {
             }
             """;
 
-    public GraphicsDisplay(int width, int height, String name, Launcher launcher) {
+    public GraphicsDisplay(int width, int height, String name, PhysicsCore physicsCore, Launcher launcher) {
         this.height = height;
         this.width = width;
         this.name = name;
         this.launcher = launcher;
+        this.physicsCore = physicsCore;
     }
 
     public void run() {
@@ -155,7 +158,7 @@ public class GraphicsDisplay {
 
         Camera camera = new Camera(width, height, new Vector3f(0.0f, 0.0f, 2.0f), this);
 
-        ArrayContainer arrayContainer = new ArrayContainer(launcher);
+        ArrayContainer arrayContainer = new ArrayContainer(physicsCore);
 
         VAO vertexArrayObject = new VAO();
         vertexArrayObject.bind();

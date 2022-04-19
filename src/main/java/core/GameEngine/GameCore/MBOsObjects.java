@@ -13,7 +13,7 @@ public class MBOsObjects {
             object
     };
 
-    public MBOsObjects(){
+    public MBOsObjects() {
 
     }
 
@@ -34,7 +34,7 @@ public class MBOsObjects {
         return mas;
     }
 
-    public static MBO[] getMBOs(){
+    public static MBO[] getMBOs() {
         return mas;
     }
 }
