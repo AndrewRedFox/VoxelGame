@@ -4,11 +4,22 @@ import static org.lwjgl.opengl.GL33.*;
 
 public class VBO {
     private int id;
+    private ArrayContainer arrayContainer;
 
-    VBO(float[] vertices) {
+    VBO(ArrayContainer arrayContainer) {
         id = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, id);
-        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+        this.arrayContainer = arrayContainer;
+        //bind();
+        //refresh();
+    }
+
+    void bindRefresh() {
+        bind();
+        refresh();
+    }
+
+    void refresh() {
+        glBufferData(GL_ARRAY_BUFFER, arrayContainer.vertices, GL_STATIC_DRAW);
     }
 
     void bind() {

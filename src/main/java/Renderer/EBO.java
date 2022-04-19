@@ -4,11 +4,22 @@ import static org.lwjgl.opengl.GL33.*;
 
 public class EBO {
     private int id;
+    private ArrayContainer arrayContainer;
 
-    EBO(int[] indices) {
+    EBO(ArrayContainer arrayContainer) {
         id = glGenBuffers();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
+        this.arrayContainer = arrayContainer;
+        //bind();
+        //refresh();
+    }
+
+    void bindRefresh() {
+        bind();
+        refresh();
+    }
+
+    void refresh() {
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, arrayContainer.indices, GL_STATIC_DRAW);
     }
 
     void bind() {

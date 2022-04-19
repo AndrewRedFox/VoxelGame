@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL33.*;
 public class Texture {
     private final int texture;
 
-    Texture(String path) {
+    Texture(String path, int width, int height) {
 
         texture = glGenTextures();
         glActiveTexture(texture);
@@ -42,7 +42,7 @@ public class Texture {
                 }
             }
             buffer.flip();
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 256, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
             System.out.println("Texture (capacity = " + buffer.capacity() + ") loaded");
         } catch (Exception e) {
             System.out.println("Unable to load " + path + " texture");

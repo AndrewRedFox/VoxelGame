@@ -45,7 +45,7 @@ public class Camera {
     }
 
     void Inputs(long window) {
-        if(glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
             graphicsDisplay.toClose = true;
             glfwSetWindowShouldClose(window, true);
         }
@@ -61,6 +61,15 @@ public class Camera {
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
             position.add(new Vector3f(orientation).cross(up).normalize().mul(-speed));
+        }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+            speed = 1.0f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE) {
+            speed = 0.1f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
+            speed = 0.025f;
         }
 
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
@@ -81,7 +90,7 @@ public class Camera {
             newOrientation.rotateX((float) (rotX / 180.0f * Math.sin(orientation.z * pi / 2.0) * pi));
             newOrientation.rotateZ((float) (-rotX / 180.0f * Math.sin(orientation.x * pi / 2.0) * pi));
 
-            if(newOrientation.angle(up) > 5.0 / 180.0 * pi && newOrientation.angle(up) < 175.0 / 180.0 * pi){
+            if (newOrientation.angle(up) > 5.0 / 180.0 * pi && newOrientation.angle(up) < 175.0 / 180.0 * pi) {
                 orientation = new Vector3f(newOrientation);
             }
 
