@@ -34,7 +34,7 @@ public class GraphicsDisplay {
         frames++;
         currentTime = glfwGetTime();
         if (currentTime - lastTime > 1.0) {
-            System.out.println(frames);
+           // System.out.println(frames);
             lastTime = currentTime;
             frames = 0;
         }
