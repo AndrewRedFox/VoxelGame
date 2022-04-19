@@ -14,6 +14,10 @@ public class SimulationSimple {
         mass.object = object;
     }
 
+    public SimulationSimple(float m) {
+        mass.m = m;
+    }
+
     public void init() {
         mass.init();
     }
@@ -24,7 +28,7 @@ public class SimulationSimple {
 
     public void solve() {//применяем силы
         mass.applyForce(gravitation.multiplyOperator(mass.m));
-        mass.applyForce(wind.multiplyOperator(mass.m));
+        //mass.applyForce(wind.multiplyOperator(mass.m));
     }
 
     public void simulate(float dt) {
@@ -35,7 +39,9 @@ public class SimulationSimple {
         return mass.getObj();
     }
 
-    public void operate() { // Полная процедура симуляции.
+    public void operate(MBO object) { // Полная процедура симуляции.
+        mass.object = object;
+        mass.collision.setObject(object);
         init();            // 1. Силу в 0
         solve();           // 2. Применяем силы
         simulate(dt);      // 3. Процедура

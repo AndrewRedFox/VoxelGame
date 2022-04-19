@@ -38,7 +38,7 @@ public class GraphicsDisplay {
         frames++;
         currentTime = glfwGetTime();
         if (currentTime - lastTime > 1.0) {
-            System.out.println(frames);
+           // System.out.println(frames);
             lastTime = currentTime;
             frames = 0;
         }
@@ -258,7 +258,7 @@ public class GraphicsDisplay {
         Texture texture = new Texture("picture.png");
         texture.texUnit(shader, "tex0", 0);
 
-        Camera camera = new Camera(width, height, new Vector3f(0.0f, 0.0f, 2.0f));
+        Camera camera = new Camera(width, height, new Vector3f(0.0f, 0.0f, 2.0f),this);
 
         float rotation = 0.0f;
         while (!glfwWindowShouldClose(window)) {

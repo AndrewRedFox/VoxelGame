@@ -1,5 +1,6 @@
 package core.GameEngine.GameCore;
 
+import core.GameEngine.GameCore.Collision.Collision;
 import core.GameEngine.MBO;
 import jglm.Vec;
 
@@ -10,6 +11,7 @@ public class Mass {
     public Vector3D vel = new Vector3D(); //скорость
     public Vector3D force = new Vector3D(); //воздействующая сила
     public MBO object = new MBO();
+    public Collision collision = new Collision(object);
 
     public Mass(float m, MBO object) {
         this.m = m;
@@ -40,9 +42,12 @@ public class Mass {
 
     public void simulate(float dt) { //dt это время
         rePosition();
-        vel.plusAndEqualsOperator((force.divideOperator(m)).multiplyOperator(dt)); //изменение скорости
-        pos.plusAndEqualsOperator(vel.multiplyOperator(dt)); //изменение положения
-        object.setVector3D(pos);
+        if(!collision.isCollision()){
+            vel.plusAndEqualsOperator((force.divideOperator(m)).multiplyOperator(dt)); //изменение скорости
+            pos.plusAndEqualsOperator(vel.multiplyOperator(dt)); //изменение положения
+            object.setVector3D(pos);
+        }
+
     }
 
 
