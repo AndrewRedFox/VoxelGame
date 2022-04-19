@@ -10,15 +10,16 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class PhysicsCore {
-    public MBO[] mbos;
-    public SimulationSimple simulate = new SimulationSimple(2.0f);//object
+    public MBOsObjects mbOsObjects;
+    public SimulationSimple simulate;//object
     private Launcher launcher;
     private long delay;
 
     public PhysicsCore(MBO[] mbos, long delay, Launcher launcher) {
-        this.mbos = mbos;
+        this.mbOsObjects = new MBOsObjects(mbos);
         this.delay = delay;
         this.launcher = launcher;
+        this.simulate = new SimulationSimple(2.0f, mbOsObjects.getByIndex(0), mbOsObjects);
     }
 
     public void run() {
@@ -26,9 +27,9 @@ public class PhysicsCore {
             System.out.println("Start runSim");
             while (!launcher.toClose()) {
                 synchronized (this) {
-                    simulate.setObject(mbos[0]);//одновременно идет проверка коллизий и применение силы на обьект
-                    simulate.operate(mbos[0]);
-                    mbos[0].setVector3D(simulate.getObject());
+                    MBO temp = mbOsObjects.getByIndex(0);
+                    simulate.operate(temp);
+                    temp.setVector3D(simulate.getObject());
                 }
                 try {
                     Thread.sleep(delay);

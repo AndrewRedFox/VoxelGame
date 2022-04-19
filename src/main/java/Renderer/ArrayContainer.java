@@ -1,5 +1,6 @@
 package Renderer;
 
+import core.GameEngine.GameCore.MBOsObjects;
 import core.GameEngine.MBO;
 import core.GameEngine.PhysicsCore;
 import core.GameEngine.Voxel;
@@ -14,10 +15,21 @@ public class ArrayContainer {
         this.physicsCore = physicsCore;
     }
 
+    @Deprecated
     private int countVoxels(MBO[] mboS) {
         int sum = 0;
         for (MBO mbo : mboS) {
             for (Voxel voxel : mbo.voxels) {
+                sum += voxel.renderCount;
+            }
+        }
+        return sum;
+    }
+
+    private int countVoxels(MBOsObjects mbOsObjects) {
+        int sum = 0;
+        for(int i = 0; i < mbOsObjects.size(); i++){
+            for (Voxel voxel : mbOsObjects.getByIndex(i).voxels) {
                 sum += voxel.renderCount;
             }
         }
@@ -33,12 +45,13 @@ public class ArrayContainer {
 
     void refreshMBOS(){
         synchronized (physicsCore) {
-            mboSLength = countVoxels(physicsCore.mbos);
+            mboSLength = countVoxels(physicsCore.mbOsObjects);
             vertices = new float[mboSLength * 20];
             indices = new int[mboSLength * 6];
 
             int idVoxelPart = 0;
-            for (MBO mbo : physicsCore.mbos) {
+            for (int i = 0; i < physicsCore.mbOsObjects.size(); i++) {
+                MBO mbo = physicsCore.mbOsObjects.getByIndex(i);
                 float mboX = mbo.getX(), mboY = mbo.getY(), mboZ = mbo.getZ();
                 for (Voxel voxel : mbo.voxels) {
                     setMboVertices(voxel, mboX, mboY, mboZ, idVoxelPart);

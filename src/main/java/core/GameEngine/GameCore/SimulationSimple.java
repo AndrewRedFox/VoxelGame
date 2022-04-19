@@ -4,19 +4,20 @@ import Renderer.VAO;
 import core.GameEngine.MBO;
 
 public class SimulationSimple {
-    public Mass mass = new Mass();
-    public Vector3D gravitation = new Vector3D(0.0f, -9.8f, 0.0f);
-    public Vector3D wind = new Vector3D(10.0f,0.0f,0.0f);
-    public float dt = 0.013f;
+    private Mass mass;
+    private Vector3D gravitation = new Vector3D(0.0f, -9.8f, 0.0f);
+    private Vector3D wind = new Vector3D(10.0f,0.0f,0.0f);
+    private float dt = 0.013f;
+    private MBOsObjects mbOsObjects;
 
-    public SimulationSimple(float m, MBO object) {
-        mass.m = m;
-        mass.object = object;
+    public SimulationSimple(float m, MBO object, MBOsObjects mbOsObjects) {
+        this.mbOsObjects = mbOsObjects;
+        this.mass = new Mass(m, object, mbOsObjects);
     }
 
-    public SimulationSimple(float m) {
+    /*public SimulationSimple(float m) {
         mass.m = m;
-    }
+    }*/
 
     public void init() {
         mass.init();

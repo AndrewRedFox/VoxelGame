@@ -11,11 +11,12 @@ import core.Launcher;
 public class Collision {
     public MBO object;
     public float voxelSize = GraphicsDisplay.voxelSize;
-    public MBO[] mas = MBOsObjects.getMBOs();
+    public MBOsObjects mbOsObjects;
 
 
-    public Collision(MBO object) {
+    public Collision(MBO object, MBOsObjects mbOsObjects) {
         this.object = object;
+        this.mbOsObjects = mbOsObjects;
     }
 
     public void setObject(MBO object) {
@@ -29,13 +30,13 @@ public class Collision {
             double o1y = object.getY() + object.voxels[i].getY() * voxelSize;
             double o1z = object.getZ() + object.voxels[i].getZ() * voxelSize;
 
-            for (int j = 0; j < mas.length; j++) {
-                if(mas[j]!=object) {
+            for (int j = 0; j < mbOsObjects.size(); j++) {
+                if(mbOsObjects.getByIndex(j)!=object) {
                     flag = false;
-                    for (int k = 0; k < mas[j].voxels.length; k++) {
-                        double o2x = mas[j].getX() + mas[j].voxels[k].getX() * voxelSize;
-                        double o2y = mas[j].getY() + mas[j].voxels[k].getY() * voxelSize;
-                        double o2z = mas[j].getZ() + mas[j].voxels[k].getZ() * voxelSize;
+                    for (int k = 0; k < mbOsObjects.getByIndex(j).voxels.length; k++) {
+                        double o2x = mbOsObjects.getByIndex(j).getX() + mbOsObjects.getByIndex(j).voxels[k].getX() * voxelSize;
+                        double o2y = mbOsObjects.getByIndex(j).getY() + mbOsObjects.getByIndex(j).voxels[k].getY() * voxelSize;
+                        double o2z = mbOsObjects.getByIndex(j).getZ() + mbOsObjects.getByIndex(j).voxels[k].getZ() * voxelSize;
                         //System.out.println(o2x + " " + o2y + " " + o2z);
                         if (o1x > o2x - voxelSize && o1x < o2x + voxelSize && o1y > o2y - voxelSize && o1y < o2y + voxelSize && o1z > o2z - voxelSize && o1z < o2z + voxelSize) {
                             flag = true;

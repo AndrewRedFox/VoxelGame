@@ -10,17 +10,18 @@ public class Mass {
     public Vector3D pos = new Vector3D(); //положение в пространстве
     public Vector3D vel = new Vector3D(); //скорость
     public Vector3D force = new Vector3D(); //воздействующая сила
-    public MBO object = new MBO();
-    public Collision collision = new Collision(object);
+    public MBO object;
+    public Collision collision;
 
-    public Mass(float m, MBO object) {
+    public Mass(float m, MBO object, MBOsObjects mbOsObjects) {
         this.m = m;
         this.object = object;
+        this.collision  = new Collision(object, mbOsObjects);
     }
 
-    public Mass() {
+    /*public Mass() {
         m = 0;
-    }
+    }*/
 
     public void rePosition() {
         this.pos.change(object.getVector3D());

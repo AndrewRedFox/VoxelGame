@@ -7,17 +7,13 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class MBOsObjects {
-    public static MBO object = new MBO(genVoxelArray(1), new Vector3D(2.0f, 50.0f, 0.0f), 0.0f, 0.0f, 0.0f);
-    public static MBO[] mas = new MBO[]{
-            new MBO(genVoxelArray(10), new Vector3D(0.0f, 0.0f, 0.0f), 0.0f, 0.0f, 0.0f),
-            object
-    };
+    private MBO[] objects;
 
-    public MBOsObjects() {
-
+    public MBOsObjects(MBO[] mbos) {
+        this.objects = mbos;
     }
 
-    static Voxel[] genVoxelArray(int count) {
+    private static Voxel[] genVoxelArray(int count) {
         Voxel[] mas = new Voxel[count];
         int[] cord = {0, 0, 0};
         HashSet<Integer> set = new HashSet<>();
@@ -34,7 +30,11 @@ public class MBOsObjects {
         return mas;
     }
 
-    public static MBO[] getMBOs() {
-        return mas;
+    public int size(){
+        return objects.length;
+    }
+
+    public MBO getByIndex(int i) {
+        return objects[i];
     }
 }
