@@ -42,7 +42,7 @@ public class Collision {
                         double o2y = mbOsObjects.getByIndex(j).getY() + mbOsObjects.getByIndex(j).voxels[k].getY() * voxelSize;
                         double o2z = mbOsObjects.getByIndex(j).getZ() + mbOsObjects.getByIndex(j).voxels[k].getZ() * voxelSize;
                         //System.out.println(o2x + " " + o2y + " " + o2z);
-                        if (o1x > o2x - voxelSize && o1x < o2x + voxelSize && o1y > o2y - voxelSize && o1y < o2y + voxelSize && o1z > o2z - voxelSize && o1z < o2z + voxelSize) {
+                        if (Math.abs(o1y - o2y) < voxelSize) {
                             flag = true;
                             objectCollision = mbOsObjects.getByIndex(j);
                         }

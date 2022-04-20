@@ -36,7 +36,7 @@ public class GraphicsDisplay {
         frames++;
         currentTime = glfwGetTime();
         if (currentTime - lastTime > 1.0) {
-           // System.out.println(frames);
+            System.out.println(frames);
             lastTime = currentTime;
             frames = 0;
         }
@@ -161,10 +161,15 @@ public class GraphicsDisplay {
 
         ArrayContainer arrayContainer = new ArrayContainer(physicsCore);
 
+        arrayContainer.refreshMBOS();
+
         VAO vertexArrayObject = new VAO();
         vertexArrayObject.bind();
         VBO vertexBufferObject = new VBO(arrayContainer);
         EBO elementBufferObject = new EBO(arrayContainer);
+
+        vertexBufferObject.bindRefresh();
+        elementBufferObject.bindRefresh();
 
         vertexArrayObject.LinkAttrib(vertexBufferObject, 0, 20, 0);
         vertexArrayObject.LinkAttrib(vertexBufferObject, 1, 20, 12);
@@ -174,7 +179,7 @@ public class GraphicsDisplay {
         elementBufferObject.unbind();
 
         while (!glfwWindowShouldClose(window)) {
-            arrayContainer.refreshMBOS();
+            //arrayContainer.refreshMBOS();
 
             vertexArrayObject.bind();
             vertexBufferObject.bindRefresh();
