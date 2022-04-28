@@ -30,7 +30,7 @@ public class PhysicsCore {
             System.out.println("Start runSim");
             while (!launcher.toClose()) {
                 synchronized (this) {
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < 2; i++) {
                         MBO temp = mbOsObjects.getByIndex(i);
                         this.simulate.setObject(temp, mbOsObjects);
                         this.simulate.operate(temp);

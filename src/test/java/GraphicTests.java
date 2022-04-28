@@ -17,9 +17,11 @@ public class GraphicTests {
     @Test
     void autoTest() {
         MBO[] mbos = {
-                new MBO(MBO.genVoxelArray(2), new Vector3D(5.0f, 10.0f, 0.0f), new RigidBody(300.0f, 20.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
+                new MBO(MBO.genVoxelArray(2), new Vector3D(-10.0f, 5.0f, 0.0f), new RigidBody(300.0f, new Vector3D(1,0,0), 0.0f, true), 0.0f, 0.0f, 0.0f),//*****
+                new MBO(MBO.genVoxelArray(2), new Vector3D(10.0f, 5.0f, 0.0f), new RigidBody(0.0f, new Vector3D(-2,0,0), 0.0f, true), 0.0f, 0.0f, 0.0f),//*****
+                new MBO(MBO.genVoxelArray(2), new Vector3D(5.0f, 60.0f, 0.0f), new RigidBody(300.0f, 20.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
                 new MBO(MBO.genVoxelArray(2), new Vector3D(12.0f, 60.0f, 0.0f),new RigidBody(10.0f, -40.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
-                new MBO(MBO.genVoxelArray(2), new Vector3D(15.0f, 20.0f, 0.0f),new RigidBody(50.0f, 0.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
+                new MBO(MBO.genVoxelArray(2), new Vector3D(15.0f, 60.0f, 0.0f),new RigidBody(50.0f, 0.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
                 new MBO(MBO.genVoxelArray(2), new Vector3D(-6.0f, -10.0f, 0.0f),new RigidBody(1.0f, 2.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
                 new MBO(MBO.genVoxelArray(20), new Vector3D(12.0f, -10.0f, 0.0f),new RigidBody(100.0f, 20.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
                 new MBO(MBO.genVoxelArray(2), new Vector3D(-10.0f, -10.0f, 0.0f),new RigidBody(1.0f, 2.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
