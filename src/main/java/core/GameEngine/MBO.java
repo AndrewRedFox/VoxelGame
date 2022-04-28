@@ -1,6 +1,8 @@
 package core.GameEngine;
 
+import core.GameEngine.GameCore.RigidBody;
 import core.GameEngine.GameCore.Vector3D;
+//import jdk.incubator.vector.VectorOperators;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,10 +12,12 @@ public class MBO {
     public Voxel[] voxels;
     private Vector3D vector3D = new Vector3D();//*
     private float angleX, angleY, angleZ;
+    private RigidBody rigidBody = new RigidBody(5.0f, 2.0f, 0.0f, true);
 
-    public MBO(Voxel[] voxels, Vector3D vector3D, float angleX, float angleY, float angleZ) {
+    public MBO(Voxel[] voxels, Vector3D vector3D, RigidBody rigidBody, float angleX, float angleY, float angleZ) {
         this.voxels = voxels;
         this.vector3D = vector3D;
+        this.rigidBody = rigidBody;
         this.angleX = angleX;
         this.angleY = angleY;
         this.angleZ = angleZ;
@@ -34,7 +38,7 @@ public class MBO {
         }
     }
 
-    /*public static Voxel[] genVoxelArray(int count) {
+    public static Voxel[] genVoxelArray(int count) {
         Voxel[] mas = new Voxel[count];
         int[] cord = {0, 0, 0};
         HashSet<Integer> set = new HashSet<>();
@@ -48,7 +52,15 @@ public class MBO {
             }
         }
         return mas;
-    }*/
+    }
+
+    public static Voxel[] genFloor(){
+        Voxel[] mas = new Voxel[2];
+        mas[0] = new Voxel(0, 0, 0);
+        mas[0] = new Voxel(2, 0, 0);
+        return mas;
+    }
+
 
     public MBO(Vector3D vector3D) {
         this.vector3D = vector3D;
@@ -102,5 +114,9 @@ public class MBO {
 
     public void setAngleZ(float angleZ) {
         this.angleZ = angleZ;
+    }
+
+    public RigidBody getRigidBody(){
+        return rigidBody;
     }
 }

@@ -10,7 +10,7 @@ public class Launcher {
 
     public Launcher(MBO[] mbos, long delay) {
         this.physicsCore = new PhysicsCore(mbos, delay, this);
-        this.graphicsDisplay = new GraphicsDisplay(1080, 1080, "VoxelGame", physicsCore, this);
+        this.graphicsDisplay = new GraphicsDisplay(1080, 720, "VoxelGame", physicsCore, this);
     }
 
 

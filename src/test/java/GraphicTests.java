@@ -1,3 +1,4 @@
+import core.GameEngine.GameCore.RigidBody;
 import core.GameEngine.GameCore.Vector3D;
 import core.GameEngine.MBO;
 import core.Launcher;
@@ -7,7 +8,7 @@ public class GraphicTests {
 
     @Test
     void newTest() {
-        MBO[] mbos = {new MBO(MBO.genVoxelArray(2), new Vector3D(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f)};
+        MBO[] mbos = {new MBO(MBO.genVoxelArray(2), new Vector3D(0.0f, 1.0f, 0.0f),new RigidBody(1.0f, 2.0f, 0.0f, true), 0.0f, 0.0f, 0.0f)};
 
         Launcher launcher = new Launcher(mbos, 100L);
         launcher.run();
@@ -16,14 +17,19 @@ public class GraphicTests {
     @Test
     void autoTest() {
         MBO[] mbos = {
-                new MBO(MBO.genVoxelArray(2), new Vector3D(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 0.0f),
-                new MBO(MBO.genVoxelArray(2), new Vector3D(0.0f, -10.0f, 0.0f), 0.0f, 0.0f, 0.0f)
+                new MBO(MBO.genVoxelArray(2), new Vector3D(5.0f, 10.0f, 0.0f), new RigidBody(300.0f, 20.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
+                new MBO(MBO.genVoxelArray(2), new Vector3D(12.0f, 60.0f, 0.0f),new RigidBody(10.0f, -40.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
+                new MBO(MBO.genVoxelArray(2), new Vector3D(15.0f, 20.0f, 0.0f),new RigidBody(50.0f, 0.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
+                new MBO(MBO.genVoxelArray(2), new Vector3D(-6.0f, -10.0f, 0.0f),new RigidBody(1.0f, 2.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
+                new MBO(MBO.genVoxelArray(20), new Vector3D(12.0f, -10.0f, 0.0f),new RigidBody(100.0f, 20.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
+                new MBO(MBO.genVoxelArray(2), new Vector3D(-10.0f, -10.0f, 0.0f),new RigidBody(1.0f, 2.0f, 0.0f, true), 0.0f, 0.0f, 0.0f),
+                new MBO(MBO.genVoxelArray(4), new Vector3D(8.0f, -10.0f, 0.0f), new RigidBody(1.0f, 2.0f, 0.0f, true),0.0f, 0.0f, 0.0f)
         };
-        Launcher launcher = new Launcher(mbos, 50L);
+        Launcher launcher = new Launcher(mbos, 30L);
         launcher.run();
     }
 
-    @Test
+    /*@Test
     void maxGUITest() {
         MBO[] mbos = {
                 new MBO(MBO.genVoxelArray(10000), new Vector3D(0.0f, 400.0f, 0.0f), 0.0f, 0.0f, 0.0f),
@@ -35,7 +41,7 @@ public class GraphicTests {
         };
         Launcher launcher = new Launcher(mbos, 100L);
         launcher.run();
-    }
+    }*/
 
     /*@Test
     void cubeGUITest() {
