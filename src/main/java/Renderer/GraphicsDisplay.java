@@ -150,6 +150,7 @@ public class GraphicsDisplay {
         GL.createCapabilities();
         glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
 
         Shader shader = new Shader(vertexShaderSource, fragmentShaderSource);
 
