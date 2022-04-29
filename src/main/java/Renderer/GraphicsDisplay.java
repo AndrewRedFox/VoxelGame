@@ -179,7 +179,7 @@ public class GraphicsDisplay {
         elementBufferObject.unbind();
 
         while (!glfwWindowShouldClose(window)) {
-            //arrayContainer.refreshMBOS();
+            arrayContainer.refreshMBOS();
 
             vertexArrayObject.bind();
             vertexBufferObject.bindRefresh();
@@ -209,6 +209,7 @@ public class GraphicsDisplay {
 
             glfwSwapBuffers(window);
             glfwPollEvents();
+            printRenderTime();
         }
         vertexArrayObject.delete();
         vertexBufferObject.delete();
