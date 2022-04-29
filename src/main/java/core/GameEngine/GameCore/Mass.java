@@ -73,13 +73,14 @@ public class Mass {
         //---------------------------------------------------------------------------------
 
         float y = (Math.abs(0.5f * (2 * collision.getObjectCollision().getRigidBody().getMass() * collision.getObjectCollision().getRigidBody().getSpeedV().getY() + (rigidBody.getMass() - collision.getObjectCollision().getRigidBody().getMass()) * rigidBody.getSpeedV().getY()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass())));
-        float x = (Math.abs(0.5f * (2 * collision.getObjectCollision().getRigidBody().getMass() * collision.getObjectCollision().getRigidBody().getSpeedV().getX() + (rigidBody.getMass() - collision.getObjectCollision().getRigidBody().getMass()) * rigidBody.getSpeedV().getX()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass())));
+        float x = (/*Math.abs*/(/*0.5f * */(2 * collision.getObjectCollision().getRigidBody().getMass() * collision.getObjectCollision().getRigidBody().getSpeedV().getX() + (rigidBody.getMass() - collision.getObjectCollision().getRigidBody().getMass()) * rigidBody.getSpeedV().getX()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass())));
         float z = (Math.abs(0.5f * (2 * collision.getObjectCollision().getRigidBody().getMass() * collision.getObjectCollision().getRigidBody().getSpeedV().getZ() + (rigidBody.getMass() - collision.getObjectCollision().getRigidBody().getMass()) * rigidBody.getSpeedV().getZ()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass())));
 
         float otherY = (Math.abs(0.5f * (2 * rigidBody.getMass() * rigidBody.getSpeedV().getY() + (collision.getObjectCollision().getRigidBody().getMass() - rigidBody.getMass()) * collision.getObjectCollision().getRigidBody().getSpeedV().getY()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass())));
-        float otherX = (Math.abs(0.5f * (2 * rigidBody.getMass() * rigidBody.getSpeedV().getX() + (collision.getObjectCollision().getRigidBody().getMass() - rigidBody.getMass()) * collision.getObjectCollision().getRigidBody().getSpeedV().getX()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass())));
-        float otherZ = (Math.abs(0.5f * (2 * rigidBody.getMass() * rigidBody.getSpeedV().getZ() + (collision.getObjectCollision().getRigidBody().getMass() - rigidBody.getMass()) * collision.getObjectCollision().getRigidBody().getSpeedV().getZ()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass())));
+        float otherX = (/*Math.abs*/(/*0.3f * */(2 * rigidBody.getMass() * rigidBody.getSpeedV().getX() + (collision.getObjectCollision().getRigidBody().getMass() - rigidBody.getMass()) * collision.getObjectCollision().getRigidBody().getSpeedV().getX()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass())));
+        float otherZ = (Math.abs(0.3f * (2 * rigidBody.getMass() * rigidBody.getSpeedV().getZ() + (collision.getObjectCollision().getRigidBody().getMass() - rigidBody.getMass()) * collision.getObjectCollision().getRigidBody().getSpeedV().getZ()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass())));
 
+        System.out.println(x + " " + otherX);
 
         Vector3D impuls = new Vector3D(x, y, z);
         Vector3D otherImpuls = new Vector3D(otherX, otherY, otherZ);
@@ -98,7 +99,11 @@ public class Mass {
         pos.plusAndEqualsOperator(impuls.multiplyOperator(dt));
 
         otherObjectPos = collision.getObjectCollision().getVector3D();
-        otherObjectPos.plusAndEqualsOperator(otherImpuls.multiplyOperator(dt).multiplyOperator(-1.0f));
+        if(otherY!=0){
+            otherObjectPos.plusAndEqualsOperator(otherImpuls.multiplyOperator(dt).multiplyOperator(-1.0f));
+        }else{
+            otherObjectPos.plusAndEqualsOperator(otherImpuls.multiplyOperator(dt).multiplyOperator(1.0f));
+        }
         collision.getObjectCollision().setVector3D(otherObjectPos);
 
         //System.out.println(impuls.getX());
@@ -108,10 +113,12 @@ public class Mass {
         rePosition();
         if (!collision.isCollision()) {
             vel.plusAndEqualsOperator((force.divideOperator(rigidBody.getMass())).multiplyOperator(dt)); //изменение скорости
+
             //rigidBody.setSpeed(vel.getY());**********
             rigidBody.setSpeedV(vel);//*************
             pos.plusAndEqualsOperator(vel.multiplyOperator(dt)); //изменение положения
             object.setVector3D(pos);
+            System.out.println(vel.getX());
         } else {
             impulsFunction(dt);
         }

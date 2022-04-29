@@ -29,7 +29,7 @@ public class SimulationSimple {
 
     public void solve() {//применяем силы
         //mass.applyForce(gravitation.multiplyOperator(mass.rigidBody.getMass()));
-        mass.applyForce(wind.multiplyOperator(mass.rigidBody.getMass()));
+        //mass.applyForce(wind.multiplyOperator(mass.rigidBody.getMass()));
     }
 
     public void simulate(float dt) {
