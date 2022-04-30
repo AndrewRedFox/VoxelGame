@@ -209,6 +209,7 @@ public class GraphicsDisplay {
 
             glfwSwapBuffers(window);
             glfwPollEvents();
+            physicsCore.Inputs(window);
             printRenderTime();
         }
         vertexArrayObject.delete();
