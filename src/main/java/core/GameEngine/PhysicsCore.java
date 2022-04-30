@@ -1,6 +1,8 @@
 package core.GameEngine;
 
 import Renderer.GraphicsDisplay;
+import core.GameEngine.Character.Character;
+import core.GameEngine.Character.SimulationCharacter;
 import core.GameEngine.GameCore.MBOsObjects;
 import core.GameEngine.GameCore.SimulationImpuls;
 import core.GameEngine.GameCore.SimulationSimple;
@@ -15,6 +17,9 @@ public class PhysicsCore {
     public SimulationSimple simulate;//object
     private Launcher launcher;
     private long delay;
+
+    private SimulationCharacter simulateCharacter;
+    private Character character;
     //public SimulationImpuls simulationImpuls;
 
     public PhysicsCore(MBO[] mbos, long delay, Launcher launcher) {
@@ -44,6 +49,27 @@ public class PhysicsCore {
                 }
             }
             System.out.println("End runSim");
+        });
+        thread.start();
+    }
+
+    public void runCharacter(){
+        Thread thread = new Thread(() -> {
+            //System.out.println("Start runSim");
+            while (!launcher.toClose()) {
+                synchronized (this) {
+                        Character temp = character;
+                        this.simulateCharacter.setObject(temp, mbOsObjects);
+                        this.simulateCharacter.operate(temp);
+                        temp.setVector3D(simulate.getObject());
+                }
+                try {
+                    Thread.sleep(delay);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+            //System.out.println("End runSim");
         });
         thread.start();
     }

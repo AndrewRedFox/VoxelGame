@@ -1,6 +1,7 @@
 package core.GameEngine.GameCore;
 
 import Renderer.VAO;
+import core.GameEngine.Character.Character;
 import core.GameEngine.MBO;
 
 public class SimulationSimple {

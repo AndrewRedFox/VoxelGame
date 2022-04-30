@@ -1,12 +1,12 @@
 package core.GameEngine.GameCore;
 
+import core.GameEngine.Character.Character;
 import core.GameEngine.GameCore.Collision.Collision;
 import core.GameEngine.MBO;
 import jglm.Vec;
 
 public class Mass {
 
-    //public float m; //значение массы
     public RigidBody rigidBody;
     public Vector3D pos = new Vector3D(); //положение в пространстве
     public Vector3D vel = new Vector3D(); //скорость
@@ -17,23 +17,18 @@ public class Mass {
 
 
     public Mass(float m, MBO object, MBOsObjects mbOsObjects) {
-        //this.m = m;
         this.object = object;
         rigidBody = this.object.getRigidBody();
-        //this.rigidBody.setMass(m);
         this.collision = new Collision(object, mbOsObjects);
-        //vel.changeY(rigidBody.getSpeed());*************
-        vel = rigidBody.getSpeedV();//**************
+        vel = rigidBody.getSpeedV();
     }
 
     public Mass(MBO object, MBOsObjects mbOsObjects) {
         this.object = object;
         rigidBody = this.object.getRigidBody();
         this.collision = new Collision(object, mbOsObjects);
-        // vel.changeY(rigidBody.getSpeed());***************
-        vel = rigidBody.getSpeedV();//**************
+        vel = rigidBody.getSpeedV();
     }
-
 
     public void rePosition() {
         this.pos.change(object.getVector3D());
@@ -64,7 +59,7 @@ public class Mass {
         float otherX = ((2 * rigidBody.getMass() * rigidBody.getSpeedV().getX() + (collision.getObjectCollision().getRigidBody().getMass() - rigidBody.getMass()) * collision.getObjectCollision().getRigidBody().getSpeedV().getX()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass()));
         float otherZ = ((2 * rigidBody.getMass() * rigidBody.getSpeedV().getZ() + (collision.getObjectCollision().getRigidBody().getMass() - rigidBody.getMass()) * collision.getObjectCollision().getRigidBody().getSpeedV().getZ()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass()));
 
-        System.out.println(y + " " + otherY);
+        //System.out.println(y + " " + otherY);
 
         Vector3D impuls = new Vector3D(x, y, z);
         Vector3D otherImpuls = new Vector3D(otherX, otherY, otherZ);
@@ -79,9 +74,9 @@ public class Mass {
         pos.plusAndEqualsOperator(impuls.multiplyOperator(dt));
 
         otherObjectPos = collision.getObjectCollision().getVector3D();
-        if(otherY!=0|| y!=0){
+        if (otherY != 0 || y != 0) {
             otherObjectPos.plusAndEqualsOperator(otherImpuls.multiplyOperator(dt).multiplyOperator(-1.0f));
-        }else{
+        } else {
             otherObjectPos.plusAndEqualsOperator(otherImpuls.multiplyOperator(dt).multiplyOperator(1.0f));
         }
         collision.getObjectCollision().setVector3D(otherObjectPos);
@@ -93,6 +88,12 @@ public class Mass {
         rePosition();
         if (!collision.isCollision()) {
             vel.plusAndEqualsOperator((force.divideOperator(rigidBody.getMass())).multiplyOperator(dt)); //изменение скорости
+            /*if (vel.getX() > 0) {
+                vel.setX(vel.getX() - 0.0055f);
+            }*/
+           /* System.out.println(vel.getX());
+            vel=vel.divideOperator(-10).plusOperator(vel);
+            System.out.println(vel.getX());*/
             rigidBody.setSpeedV(vel);
             pos.plusAndEqualsOperator(vel.multiplyOperator(dt)); //изменение положения
             object.setVector3D(pos);
@@ -100,6 +101,5 @@ public class Mass {
             impulsFunction(dt);
         }
     }
-
 
 }
