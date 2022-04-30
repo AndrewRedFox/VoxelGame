@@ -21,6 +21,12 @@ public class RigidBody {
         this.UseGravity = UseGravity;
     }
 
+    public void adjustSpeed(float dx, float dy, float dz){
+        speedV.x += dx;
+        speedV.y += dy;
+        speedV.z += dz;
+    }
+
     public float getMass() {
         return mass;
     }
