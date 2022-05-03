@@ -1,6 +1,7 @@
 package core.GameEngine.GameCore.Collision;
 
 import Renderer.GraphicsDisplay;
+import core.GameEngine.Character.Character;
 import core.GameEngine.GameCore.MBOsObjects;
 import core.GameEngine.GameCore.Vector3D;
 import core.GameEngine.MBO;

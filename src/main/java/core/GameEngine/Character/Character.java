@@ -2,6 +2,7 @@ package core.GameEngine.Character;
 
 import core.GameEngine.GameCore.RigidBody;
 import core.GameEngine.GameCore.Vector3D;
+import jglm.Vec;
 
 public class Character {
 
@@ -10,23 +11,31 @@ public class Character {
     private float damage;
     private float speed;
     private float jump;
-    private Vector3D vector3D = new Vector3D();
+    private Vector3D vectorPos = new Vector3D();
     private RigidBody rigidBody = new RigidBody(5.0f, 2.0f, 0.0f, true);
 
     public Character() {
         name = "Nitler";
         health = 50.0f;
         damage = 10.0f;
-        speed = 3.0f;
+        speed = 0.1f;
         jump = 2.0f;
+        vectorPos = new Vector3D(0, 0, 0);
     }
 
-    public Character(String name, float health, float damage, float speed, float jump) {
+    public Character(Vector3D vectorPos, String name, float health, float damage, float speed, float jump) {
+        this.vectorPos = vectorPos;
         this.name = name;
         this.health = health;
         this.damage = damage;
         this.speed = speed;
         this.jump = jump;
+    }
+
+    public void adjustPos(float dx, float dy, float dz) {
+        vectorPos.x += dx;
+        vectorPos.y += dy;
+        vectorPos.z += dz;
     }
 
     public String getName() {
@@ -69,12 +78,12 @@ public class Character {
         this.jump = jump;
     }
 
-    public Vector3D getVector3D() {
-        return vector3D;
+    public Vector3D getVectorPos() {
+        return vectorPos;
     }
 
-    public void setVector3D(Vector3D vector3D) {
-        this.vector3D = vector3D;
+    public void setVectorPos(Vector3D vectorPos) {
+        this.vectorPos.change(vectorPos);
     }
 
     public RigidBody getRigidBody() {
@@ -84,15 +93,16 @@ public class Character {
     public void setRigidBody(RigidBody rigidBody) {
         this.rigidBody = rigidBody;
     }
+
     public float getX() {
-        return vector3D.x;
+        return vectorPos.x;
     }
 
     public float getY() {
-        return vector3D.y;
+        return vectorPos.y;
     }
 
     public float getZ() {
-        return vector3D.z;
+        return vectorPos.z;
     }
 }

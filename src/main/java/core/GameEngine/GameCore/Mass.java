@@ -59,7 +59,7 @@ public class Mass {
         float otherX = ((2 * rigidBody.getMass() * rigidBody.getSpeedV().getX() + (collision.getObjectCollision().getRigidBody().getMass() - rigidBody.getMass()) * collision.getObjectCollision().getRigidBody().getSpeedV().getX()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass()));
         float otherZ = ((2 * rigidBody.getMass() * rigidBody.getSpeedV().getZ() + (collision.getObjectCollision().getRigidBody().getMass() - rigidBody.getMass()) * collision.getObjectCollision().getRigidBody().getSpeedV().getZ()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass()));
 
-        //System.out.println(y + " " + otherY);
+
 
         Vector3D impuls = new Vector3D(x, y, z);
         Vector3D otherImpuls = new Vector3D(otherX, otherY, otherZ);
@@ -72,6 +72,7 @@ public class Mass {
         }
 
         pos.plusAndEqualsOperator(impuls.multiplyOperator(dt));
+        //rigidBody.setPosition(pos);
 
         otherObjectPos = collision.getObjectCollision().getVector3D();
         if (otherY != 0 || y != 0) {
@@ -80,20 +81,13 @@ public class Mass {
             otherObjectPos.plusAndEqualsOperator(otherImpuls.multiplyOperator(dt).multiplyOperator(1.0f));
         }
         collision.getObjectCollision().setVector3D(otherObjectPos);
-
-        //System.out.println(impuls.getX());
+        //collision.getObjectCollision().getRigidBody().setPosition(otherObjectPos);
     }
 
     public void simulate(float dt) { //dt это время
         rePosition();
         if (!collision.isCollision()) {
             vel.plusAndEqualsOperator((force.divideOperator(rigidBody.getMass())).multiplyOperator(dt)); //изменение скорости
-            /*if (vel.getX() > 0) {
-                vel.setX(vel.getX() - 0.0055f);
-            }*/
-           /* System.out.println(vel.getX());
-            vel=vel.divideOperator(-10).plusOperator(vel);
-            System.out.println(vel.getX());*/
             rigidBody.setSpeedV(vel);
             pos.plusAndEqualsOperator(vel.multiplyOperator(dt)); //изменение положения
             object.setVector3D(pos);

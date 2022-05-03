@@ -29,9 +29,9 @@ public class CollisionForCharacter {
     public boolean isCollision() {
         boolean flag = false;
         for (int i = 0; i < 1; i++) {
-            double o1x = character.getX() + 1 * voxelSize;
-            double o1y = character.getY() + 2 * voxelSize;
-            double o1z = character.getZ() + 1 * voxelSize;
+            double o1x = character.getX() * voxelSize;
+            double o1y = character.getY()  * voxelSize;
+            double o1z = character.getZ()  * voxelSize;
             for (int j = 0; j < mbOsObjects.size(); j++) {
                     for (int k = 0; k < mbOsObjects.getByIndex(j).voxels.length; k++) {
                         double o2x = mbOsObjects.getByIndex(j).getX() + mbOsObjects.getByIndex(j).voxels[k].getX() * voxelSize;

@@ -1,10 +1,8 @@
 package core.GameEngine.Character;
 
-import core.GameEngine.GameCore.Collision.Collision;
 import core.GameEngine.GameCore.MBOsObjects;
 import core.GameEngine.GameCore.RigidBody;
 import core.GameEngine.GameCore.Vector3D;
-import core.GameEngine.MBO;
 
 public class CharactersMath {
 
@@ -31,7 +29,7 @@ public class CharactersMath {
 
 
     public void rePosition() {
-        this.pos.change(character.getVector3D());
+        this.pos.change(character.getVectorPos());
     }
 
 
@@ -52,7 +50,7 @@ public class CharactersMath {
             vel.plusAndEqualsOperator((force.divideOperator(rigidBody.getMass())).multiplyOperator(dt)); //изменение скорости
             rigidBody.setSpeedV(vel);
             pos.plusAndEqualsOperator(vel.multiplyOperator(dt)); //изменение положения
-            character.setVector3D(pos);
+            character.setVectorPos(pos);
         }
     }
 }

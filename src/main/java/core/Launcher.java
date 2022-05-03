@@ -20,7 +20,7 @@ public class Launcher {
 
     public void run() {
         physicsCore.run();
-        //physicsCore.runCharacter();
+        physicsCore.runCharacter();
         graphicsDisplay.run();
     }
 
