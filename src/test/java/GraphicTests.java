@@ -51,9 +51,11 @@ public class GraphicTests {
     @Test
     void autoTest2() {
         MBO[] mbos = {
-                new MBO(MBO.genVoxelArray(2), new Vector3D(-10.0f, 5.0f, 0.0f), new RigidBody(17.0f, new Vector3D(10, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f),
-                new MBO(MBO.genVoxelArray(2), new Vector3D(10.0f, 5.0f, 0.0f), new RigidBody(15.0f, new Vector3D(0, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f),
-                new MBO(MBO.genVoxelArray(2), new Vector3D(20.0f, 5.0f, 0.0f), new RigidBody(5.0f, new Vector3D(0, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f)
+                new MBO(MBO.genVoxelArray(2), new Vector3D(-100.0f, 25.0f, 0.0f), new RigidBody(17.0f, new Vector3D(0, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f),
+                new MBO(MBO.genVoxelArray(2), new Vector3D(100.0f, 25.0f, 0.0f), new RigidBody(15.0f, new Vector3D(0, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f),
+                new MBO(MBO.genVoxelArray(4), new Vector3D(160.0f, 5.0f, 0.0f), new RigidBody(5.0f, new Vector3D(0, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f),//x-20
+                new MBO(MBO.genVoxelArray(6), new Vector3D(2.0f, 5.0f, 0.0f), new RigidBody(5.0f, new Vector3D(0, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f),
+                new MBO(MBO.genVoxelArray(40), new Vector3D(4.0f, -10.0f, 0.0f), new RigidBody(50.0f, new Vector3D(0, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f)
         };
         Launcher launcher = new Launcher(mbos, 30L);
         launcher.run();
@@ -62,8 +64,8 @@ public class GraphicTests {
     @Test
     void autoTest3() {
         MBO[] mbos = {
-                new MBO(MBO.genVoxelArray(2), new Vector3D(-10.0f, 5.0f, 0.0f), new RigidBody(15.0f, new Vector3D(5, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f),//*****
-                new MBO(MBO.genVoxelArray(2), new Vector3D(10.0f, 5.0f, 0.0f), new RigidBody(15.0f, new Vector3D(-5, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f)//*****
+                new MBO(MBO.genVoxelArray(40), new Vector3D(-10.0f, 5.0f, 0.0f), new RigidBody(15.0f, new Vector3D(5, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f),//*****
+                new MBO(MBO.genVoxelArray(20), new Vector3D(10.0f, 5.0f, 0.0f), new RigidBody(15.0f, new Vector3D(-5, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f)//*****
         };
         Launcher launcher = new Launcher(mbos, 30L);
         launcher.run();
