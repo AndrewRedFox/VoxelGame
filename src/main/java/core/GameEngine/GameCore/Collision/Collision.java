@@ -14,8 +14,6 @@ public class Collision {
     public float voxelSize = GraphicsDisplay.voxelSize;
     public MBOsObjects mbOsObjects;
     public MBO objectCollision;
-    //private int objectCollisionTrigger;
-
 
     public Collision(MBO object, MBOsObjects mbOsObjects) {
         this.object = object;

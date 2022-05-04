@@ -8,6 +8,7 @@ public class SimulationSimple {
     private Mass mass;
     private Vector3D gravitation = new Vector3D(0.0f, -9.8f, 0.0f);
     private Vector3D wind = new Vector3D(2.0f, 0.0f, 0.0f);
+    private Vector3D waterForce = new Vector3D(0.0f, 12.0f, 0.0f);
     private float dt = 0.013f;
     private MBOsObjects mbOsObjects;
 
@@ -29,7 +30,7 @@ public class SimulationSimple {
     }
 
     public void solve() {//применяем силы
-        //mass.applyForce(gravitation.multiplyOperator(mass.rigidBody.getMass()));
+        mass.applyForce(gravitation.multiplyOperator(mass.rigidBody.getMass()));
         //mass.applyForce(wind.multiplyOperator(mass.rigidBody.getMass()));
     }
 

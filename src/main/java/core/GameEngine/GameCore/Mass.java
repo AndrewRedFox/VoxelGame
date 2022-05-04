@@ -36,6 +36,9 @@ public class Mass {
 
     public void applyForce(Vector3D force) { // Внешнюю силу прибавляем к «нашей»
         this.force.plusAndEqualsOperator(force);
+        if (object.getY() < 2) {
+            this.force.plusAndEqualsOperator(new Vector3D(0, 15, 0).multiplyOperator(rigidBody.getMass()));
+        }
     }
 
     public void init() { //обнуление силы
@@ -60,7 +63,6 @@ public class Mass {
         float otherZ = ((2 * rigidBody.getMass() * rigidBody.getSpeedV().getZ() + (collision.getObjectCollision().getRigidBody().getMass() - rigidBody.getMass()) * collision.getObjectCollision().getRigidBody().getSpeedV().getZ()) / (rigidBody.getMass() + collision.getObjectCollision().getRigidBody().getMass()));
 
 
-
         Vector3D impuls = new Vector3D(x, y, z);
         Vector3D otherImpuls = new Vector3D(otherX, otherY, otherZ);
 
@@ -72,7 +74,7 @@ public class Mass {
         }
 
         pos.plusAndEqualsOperator(impuls.multiplyOperator(dt));
-        //rigidBody.setPosition(pos);
+        object.setVector3D(pos);//!!!!
 
         otherObjectPos = collision.getObjectCollision().getVector3D();
         if (otherY != 0 || y != 0) {
@@ -81,7 +83,6 @@ public class Mass {
             otherObjectPos.plusAndEqualsOperator(otherImpuls.multiplyOperator(dt).multiplyOperator(1.0f));
         }
         collision.getObjectCollision().setVector3D(otherObjectPos);
-        //collision.getObjectCollision().getRigidBody().setPosition(otherObjectPos);
     }
 
     public void simulate(float dt) { //dt это время

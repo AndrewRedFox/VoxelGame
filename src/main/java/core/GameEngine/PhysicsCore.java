@@ -18,7 +18,6 @@ public class PhysicsCore {
 
     private SimulationCharacter simulateCharacter;
     private Character character = new Character();
-    //public SimulationImpuls simulationImpuls;
 
     public PhysicsCore(MBO[] mbos, long delay, Launcher launcher) {
         this.mbOsObjects = new MBOsObjects(mbos);
@@ -90,7 +89,6 @@ public class PhysicsCore {
                     this.simulateCharacter.setObject(temp, mbOsObjects);
                     this.simulateCharacter.operate(temp);
                     temp.setVectorPos(simulateCharacter.getObject());
-                    System.out.println(temp.getY());
                 }
                 try {
                     Thread.sleep(delay);

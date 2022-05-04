@@ -123,6 +123,13 @@ public class Vector3D {
         return this;
     }
 
+    public Vector3D divideVecorOperator(Vector3D vec2){
+        x/= vec2.getX();
+        y/= vec2.getY();
+        z/= vec2.getZ();
+        return this;
+    }
+
     public Vector3D minusAndEqualsOperator(Vector3D vec2) // -=
     {
         x -= vec2.x;
