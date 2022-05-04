@@ -62,21 +62,21 @@ public class PhysicsCore {
             MBO mbo = mbOsObjects.getByIndex(0);
             mbo.getRigidBody().adjustSpeed(delta, 0f, 0f);
         }
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+        /*if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
             mbo.getRigidBody().adjustSpeed(0f, delta, 0f);
         }
         if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
             mbo.getRigidBody().adjustSpeed(0f, -delta, 0f);
-        }
-        if (glfwGetKey(window, GLFW_KEY_PAGE_UP) == GLFW_PRESS) {
-            MBO mbo = mbOsObjects.getByIndex(0);
-            mbo.getRigidBody().adjustSpeed(0f, 0f, delta);
-        }
-        if (glfwGetKey(window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS) {
+        }*/
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
             mbo.getRigidBody().adjustSpeed(0f, 0f, -delta);
+        }
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+            MBO mbo = mbOsObjects.getByIndex(0);
+            mbo.getRigidBody().adjustSpeed(0f, 0f, delta);
         }
     }
 
