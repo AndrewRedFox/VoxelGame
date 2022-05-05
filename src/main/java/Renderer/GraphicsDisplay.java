@@ -35,8 +35,8 @@ public class GraphicsDisplay {
     private void printRenderTime() {
         frames++;
         currentTime = glfwGetTime();
-        if (currentTime - lastTime > 1.0) {
-            System.out.println(frames);
+        if (currentTime - lastTime > 5.0) {
+            System.out.println("gui \t" + frames/5);
             lastTime = currentTime;
             frames = 0;
         }
@@ -204,7 +204,6 @@ public class GraphicsDisplay {
             texture.bind();
             vertexArrayObject.bind();
 
-            printRenderTime();
             glDrawElements(GL_TRIANGLES, arrayContainer.indices.length, GL_UNSIGNED_INT, 0);
 
             glfwSwapBuffers(window);
