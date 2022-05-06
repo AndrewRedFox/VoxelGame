@@ -36,9 +36,6 @@ public class Mass {
 
     public void applyForce(Vector3D force) { // Внешнюю силу прибавляем к «нашей»
         this.force.plusAndEqualsOperator(force);
-        if (object.getY() < 2) {
-            this.force.plusAndEqualsOperator(new Vector3D(0, 15, 0).multiplyOperator(rigidBody.getMass()));
-        }
     }
 
     public void init() { //обнуление силы
