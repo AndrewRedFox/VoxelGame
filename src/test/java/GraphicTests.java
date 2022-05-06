@@ -63,11 +63,12 @@ public class GraphicTests {
 
     @Test
     void autoTest3() {
+        int n = 10000;
         MBO[] mbos = {
-                new MBO(MBO.genVoxelArray(40), new Vector3D(-10.0f, 8.0f, 0.0f), new RigidBody(15.0f, new Vector3D(5, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f),//*****
-                new MBO(MBO.genVoxelArray(20), new Vector3D(10.0f, 5.0f, 0.0f), new RigidBody(15.0f, new Vector3D(-5, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f)//*****
+                new MBO(MBO.genVoxelArray(n/2), new Vector3D(-n/20.0f, 8.0f, 0.0f), new RigidBody(15.0f, new Vector3D(1, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f),//*****
+                new MBO(MBO.genVoxelArray(n/2), new Vector3D(n/20.0f, 5.0f, 0.0f), new RigidBody(15.0f, new Vector3D(-1, 0, 0), 0.0f, true), 0.0f, 0.0f, 0.0f)//*****
         };
-        Launcher launcher = new Launcher(mbos, 30L);
+        Launcher launcher = new Launcher(mbos, 10L);
         launcher.run();
     }
 

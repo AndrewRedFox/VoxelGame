@@ -1,6 +1,7 @@
 package Renderer;
 
 import core.GameEngine.GameCore.MBOsObjects;
+import core.GameEngine.GameCore.Vector3D;
 import core.GameEngine.MBO;
 import core.GameEngine.PhysicsCore;
 import core.GameEngine.Voxel;
@@ -44,7 +45,7 @@ public class ArrayContainer {
     };
 
     void refreshMBOS(){
-        synchronized (physicsCore) {
+        //synchronized (physicsCore) {
             mboSLength = countVoxels(physicsCore.mbOsObjects);
             vertices = new float[mboSLength * 20];
             indices = new int[mboSLength * 6];
@@ -59,7 +60,7 @@ public class ArrayContainer {
                     //System.out.println(mboSLength + "\t" + idVoxelPart);
                 }
             }
-        }
+        //}
     }
 
     private void setMboVertices(Voxel voxel, float x, float y, float z, int startIndex) {
@@ -124,5 +125,8 @@ public class ArrayContainer {
             }
         }
         //System.out.println(1);
+    }
+
+    private void setSquareVertices(Vector3D a, Vector3D b, Vector3D c, Vector3D d){
     }
 }

@@ -23,7 +23,7 @@ public class GraphicsDisplay {
     private long window;
     private final int height;
     private final int width;
-    private int frames = 0;
+    private double frames = 0;
     private double currentTime = 0.0;
     public boolean toClose = false;
     private double lastTime = 0.0;
@@ -35,8 +35,8 @@ public class GraphicsDisplay {
     private void printRenderTime() {
         frames++;
         currentTime = glfwGetTime();
-        if (currentTime - lastTime > 5.0) {
-            System.out.println("gui \t" + frames/5);
+        if (currentTime - lastTime > 2.0) {
+            System.out.println("gui \t" + frames/2.0);
             lastTime = currentTime;
             frames = 0;
         }

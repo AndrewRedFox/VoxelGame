@@ -12,7 +12,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class PhysicsCore {
     public MBOsObjects mbOsObjects;
-    public SimulationSimple simulate;//object
+    public SimulationSimple[] simulations;//object
     private Launcher launcher;
     private long delay;
 
@@ -20,21 +20,25 @@ public class PhysicsCore {
     private Character character = new Character();
 
     private double lastTime = 0;
-    private int updateTicks = 0;
+    private double updateTicks = 0;
+    private final int threadCount = 2;
 
     public PhysicsCore(MBO[] mbos, long delay, Launcher launcher) {
         this.mbOsObjects = new MBOsObjects(mbos);
         this.delay = delay;
         this.launcher = launcher;
-        this.simulate = new SimulationSimple(2.0f, mbOsObjects.getByIndex(1), mbOsObjects);
+        this.simulations = new SimulationSimple[threadCount];
+        for(int i = 0; i < threadCount; i++){
+            simulations[i] = new SimulationSimple(2.0f, mbOsObjects.getByIndex(1), mbOsObjects);
+        }
         this.simulateCharacter = new SimulationCharacter(character, mbOsObjects);
     }
 
     private void printCoreUpdateRate(){
         updateTicks++;
         double currentTime = System.currentTimeMillis()/1000.0;
-        if (currentTime - lastTime > 5.0) {
-            System.out.println("core\t" + updateTicks/5);
+        if (currentTime - lastTime > 2.0) {
+            System.out.println("core\t" + updateTicks/2.0);
             lastTime = currentTime;
             updateTicks = 0;
         }
@@ -46,18 +50,22 @@ public class PhysicsCore {
             System.out.println("Start runSim");
             while (!launcher.toClose()) {
                 long startTime = System.nanoTime();
-                for (int i = 0; i < mbOsObjects.size(); i++) {
-                    MBO temp = mbOsObjects.getByIndex(i);
-                    synchronized (temp) {
-                        this.simulate.setObject(temp, mbOsObjects);
-                        this.simulate.operate(temp);
-                        temp.setVector3D(simulate.getObject());
+                int auxSize = mbOsObjects.size()/threadCount;
+                Thread[] threads = new Thread[threadCount];
+                for (int i = 0; i < threadCount; i++) {
+                    threads[i] = runAuxThread(i*auxSize, (i+1)*auxSize, simulations[i]);
+                }
+                for (Thread threadA: threads) {
+                    try {
+                        threadA.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
                 long endTime = System.nanoTime();
-                if(endTime - startTime < 10000000L){
+                if(endTime - startTime < 9000000L){
                     try {
-                        Thread.sleep((10000000L - endTime + startTime)/1000000L);
+                        Thread.sleep((9000000L - endTime + startTime)/1000000L);
                     } catch (Exception e) {
                         System.out.println(e);
                     }
@@ -67,6 +75,21 @@ public class PhysicsCore {
             System.out.println("End runSim");
         });
         thread.start();
+    }
+
+    private Thread runAuxThread(int start, int end, SimulationSimple simulationSimple){
+        Thread auxThread = new Thread(() -> {
+            for (int i = start; i < Math.min(end, mbOsObjects.size()); i++) {
+                MBO temp = mbOsObjects.getByIndex(i);
+                synchronized (temp) {
+                    simulationSimple.setObject(temp, mbOsObjects);
+                    simulationSimple.operate(temp);
+                    temp.setVector3D(simulationSimple.getObject());
+                }
+            }
+        });
+        auxThread.start();
+        return auxThread;
     }
 
     public void Inputs(long window) {
