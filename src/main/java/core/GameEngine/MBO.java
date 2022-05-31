@@ -4,13 +4,12 @@ import core.GameEngine.GameCore.RigidBody;
 import core.GameEngine.GameCore.Vector3D;
 //import jdk.incubator.vector.VectorOperators;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
 public class MBO {
     public Voxel[] voxels;
-    private Vector3D vector3D = new Vector3D();//*
+    private Vector3D vector3D = new Vector3D();//position
     private float angleX, angleY, angleZ;
     private RigidBody rigidBody = new RigidBody(5.0f, 2.0f, 0.0f, true);
 
@@ -52,10 +51,35 @@ public class MBO {
         return mas;
     }
 
-    public static Voxel[] genFloor(){
-        Voxel[] mas = new Voxel[2];
+    public static Voxel[] genShip(){
+        Voxel[] mas = new Voxel[27];
         mas[0] = new Voxel(0, 0, 0);
-        mas[0] = new Voxel(2, 0, 0);
+        mas[1] = new Voxel(1, 0, 0);
+        mas[2] = new Voxel(2, 0, 0);
+        mas[3] = new Voxel(3, 0, 0);
+        mas[4] = new Voxel(4, 0, 0);
+        mas[5] = new Voxel(-1, 0, 0);
+        mas[6] = new Voxel(-2, 0, 0);
+        mas[7] = new Voxel(-3, 0, 0);
+        mas[8] = new Voxel(-4, 0, 0);
+        mas[9] = new Voxel(0, 0, 1);
+        mas[10] = new Voxel(1, 0, 1);
+        mas[11] = new Voxel(2, 0, 1);
+        mas[12] = new Voxel(3, 0, 1);
+        mas[13] = new Voxel(4, 0, 1);
+        mas[14] = new Voxel(-1, 0, 1);
+        mas[15] = new Voxel(-2, 0, 1);
+        mas[16] = new Voxel(-3, 0, 1);
+        mas[17] = new Voxel(-4, 0,1);
+        mas[18] = new Voxel(0, 0, 2);
+        mas[19] = new Voxel(1, 0, 2);
+        mas[20] = new Voxel(2, 0, 2);
+        mas[21] = new Voxel(3, 0, 2);
+        mas[22] = new Voxel(4, 0, 2);
+        mas[23] = new Voxel(-1, 0, 2);
+        mas[24] = new Voxel(-2, 0, 2);
+        mas[25] = new Voxel(-3, 0, 2);
+        mas[26] = new Voxel(-4, 0,2);
         return mas;
     }
 

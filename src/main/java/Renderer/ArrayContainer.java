@@ -46,13 +46,13 @@ public class ArrayContainer {
 
     void refreshMBOS(){
         //synchronized (physicsCore) {
-            mboSLength = countVoxels(physicsCore.mbOsObjects);
+            mboSLength = countVoxels(physicsCore.getMbOsObjects());
             vertices = new float[mboSLength * 20];
             indices = new int[mboSLength * 6];
 
             int idVoxelPart = 0;
-            for (int i = 0; i < physicsCore.mbOsObjects.size(); i++) {
-                MBO mbo = physicsCore.mbOsObjects.getByIndex(i);
+            for (int i = 0; i < physicsCore.getMbOsObjects().size(); i++) {
+                MBO mbo = physicsCore.getMbOsObjects().getByIndex(i);
                 float mboX = mbo.getX(), mboY = mbo.getY(), mboZ = mbo.getZ();
                 for (Voxel voxel : mbo.voxels) {
                     setMboVertices(voxel, mboX, mboY, mboZ, idVoxelPart);

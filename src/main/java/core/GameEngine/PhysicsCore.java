@@ -11,8 +11,8 @@ import java.util.Timer;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class PhysicsCore {
-    public MBOsObjects mbOsObjects;
-    public SimulationSimple[] simulations;//object
+    private MBOsObjects mbOsObjects;
+    private SimulationSimple[] simulations;//object
     private Launcher launcher;
     private long delay;
 
@@ -95,21 +95,13 @@ public class PhysicsCore {
     public void Inputs(long window) {
         float delta = 0.05f;
 
-        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        /*if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
             mbo.getRigidBody().adjustSpeed(-delta, 0f, 0f);
         }
         if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
             mbo.getRigidBody().adjustSpeed(delta, 0f, 0f);
-        }
-        /*if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-            MBO mbo = mbOsObjects.getByIndex(0);
-            mbo.getRigidBody().adjustSpeed(0f, delta, 0f);
-        }
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-            MBO mbo = mbOsObjects.getByIndex(0);
-            mbo.getRigidBody().adjustSpeed(0f, -delta, 0f);
         }*/
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
@@ -119,6 +111,18 @@ public class PhysicsCore {
             MBO mbo = mbOsObjects.getByIndex(0);
             mbo.getRigidBody().adjustSpeed(0f, 0f, delta);
         }
+
+        if(glfwGetKey(window,GLFW_KEY_LEFT)==GLFW_PRESS){
+            MBO mbo = mbOsObjects.getByIndex(0);
+            mbo.setAngleX(mbo.getAngleX()-delta);
+            //mbo.setVector3D();
+        }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+            MBO mbo = mbOsObjects.getByIndex(0);
+            mbo.setAngleX(mbo.getAngleX()+delta);
+            //mbo.setVector3D();
+        }
+
     }
 
     public void runCharacter() {
@@ -166,4 +170,11 @@ public class PhysicsCore {
 
     }
 
+    public MBOsObjects getMbOsObjects() {
+        return mbOsObjects;
+    }
+
+    public void setMbOsObjects(MBOsObjects mbOsObjects) {
+        this.mbOsObjects = mbOsObjects;
+    }
 }

@@ -46,7 +46,7 @@ public class SimulationSimple {
 
     public void operate(MBO object) { // Полная процедура симуляции.
         mass.object = object;
-        mass.collision.setObject(object);
+        mass.getCollision().setObject(object);
         mass.rigidBody = object.getRigidBody();
         init();            // 1. Силу в 0
         solve();           // 2. Применяем силы

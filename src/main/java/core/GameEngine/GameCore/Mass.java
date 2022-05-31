@@ -12,7 +12,7 @@ public class Mass {
     public Vector3D vel = new Vector3D(); //скорость
     public Vector3D force = new Vector3D(); //воздействующая сила
     public MBO object;
-    public Collision collision;
+    private Collision collision;
     private Vector3D otherObjectPos;
 
 
@@ -94,4 +94,11 @@ public class Mass {
         }
     }
 
+    public Collision getCollision() {
+        return collision;
+    }
+
+    public void setCollision(Collision collision) {
+        this.collision = collision;
+    }
 }
