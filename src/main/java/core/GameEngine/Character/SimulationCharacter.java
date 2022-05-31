@@ -44,8 +44,8 @@ public class SimulationCharacter {
 
 
     public void operate(Character object) { // Полная процедура симуляции.
-        charactersMath.character = object;
-        charactersMath.collision.setObject(object);
+        charactersMath.setCharacter(object);
+        charactersMath.getCollision().setObject(object);
         charactersMath.rigidBody = object.getRigidBody();
         init();            // 1. Силу в 0
         solve();           // 2. Применяем силы

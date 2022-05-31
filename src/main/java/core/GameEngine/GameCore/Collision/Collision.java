@@ -5,10 +5,10 @@ import core.GameEngine.GameCore.MBOsObjects;
 import core.GameEngine.MBO;
 
 public class Collision {
-    public MBO object;
-    public float voxelSize = GraphicsDisplay.voxelSize;
-    public MBOsObjects mbOsObjects;
-    public MBO objectCollision;
+    private MBO object;
+    private float voxelSize = GraphicsDisplay.voxelSize;
+    private MBOsObjects mbOsObjects;
+    private MBO objectCollision;
 
     public Collision(MBO object, MBOsObjects mbOsObjects) {
         this.object = object;

@@ -7,11 +7,11 @@ import core.GameEngine.GameCore.Vector3D;
 public class CharactersMath {
 
     public RigidBody rigidBody;
-    public Vector3D pos = new Vector3D(); //положение в пространстве
-    public Vector3D vel = new Vector3D(); //скорость
-    public Vector3D force = new Vector3D(); //воздействующая сила
-    public Character character;
-    public CollisionForCharacter collision;
+    private Vector3D pos = new Vector3D(); //положение в пространстве
+    private Vector3D vel = new Vector3D(); //скорость
+    private Vector3D force = new Vector3D(); //воздействующая сила
+    private Character character;
+    private CollisionForCharacter collision;
     private Vector3D otherObjectPos;
 
 
@@ -52,5 +52,21 @@ public class CharactersMath {
             pos.plusAndEqualsOperator(vel.multiplyOperator(dt)); //изменение положения
             character.setVectorPos(pos);
         }
+    }
+
+    public Character getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(Character character) {
+        this.character = character;
+    }
+
+    public CollisionForCharacter getCollision() {
+        return collision;
+    }
+
+    public void setCollision(CollisionForCharacter collision) {
+        this.collision = collision;
     }
 }

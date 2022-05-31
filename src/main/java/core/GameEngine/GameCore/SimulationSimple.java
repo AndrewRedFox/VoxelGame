@@ -31,7 +31,7 @@ public class SimulationSimple {
 
     public void solve() {//применяем силы
         mass.applyForce(gravitation.multiplyOperator(mass.rigidBody.getMass()));
-        if (mass.object.getY() < 2) {
+        if (mass.getObject().getY() < 2) {
             mass.applyForce(waterForce.multiplyOperator(mass.rigidBody.getMass()));
         }
     }
@@ -45,7 +45,7 @@ public class SimulationSimple {
     }
 
     public void operate(MBO object) { // Полная процедура симуляции.
-        mass.object = object;
+        mass.setObject(object);
         mass.getCollision().setObject(object);
         mass.rigidBody = object.getRigidBody();
         init();            // 1. Силу в 0

@@ -8,10 +8,10 @@ import jglm.Vec;
 public class Mass {
 
     public RigidBody rigidBody;
-    public Vector3D pos = new Vector3D(); //положение в пространстве
-    public Vector3D vel = new Vector3D(); //скорость
-    public Vector3D force = new Vector3D(); //воздействующая сила
-    public MBO object;
+    private Vector3D pos = new Vector3D(); //положение в пространстве
+    private Vector3D vel = new Vector3D(); //скорость
+    private Vector3D force = new Vector3D(); //воздействующая сила
+    private MBO object;
     private Collision collision;
     private Vector3D otherObjectPos;
 
@@ -100,5 +100,13 @@ public class Mass {
 
     public void setCollision(Collision collision) {
         this.collision = collision;
+    }
+
+    public MBO getObject() {
+        return object;
+    }
+
+    public void setObject(MBO object) {
+        this.object = object;
     }
 }

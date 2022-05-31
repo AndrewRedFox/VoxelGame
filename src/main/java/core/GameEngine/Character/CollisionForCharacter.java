@@ -6,9 +6,9 @@ import core.GameEngine.MBO;
 
 public class CollisionForCharacter {
 
-    public Character character;
-    public float voxelSize = GraphicsDisplay.voxelSize;
-    public MBOsObjects mbOsObjects;
+    private Character character;
+    private float voxelSize = GraphicsDisplay.voxelSize;
+    private MBOsObjects mbOsObjects;
     //public MBO objectCollision;
     //private int objectCollisionTrigger;
 
