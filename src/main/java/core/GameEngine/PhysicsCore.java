@@ -4,6 +4,7 @@ import core.GameEngine.Character.Character;
 import core.GameEngine.Character.SimulationCharacter;
 import core.GameEngine.GameCore.MBOsObjects;
 import core.GameEngine.GameCore.SimulationSimple;
+import core.GameEngine.GameCore.Vector3D;
 import core.Launcher;
 
 import java.util.Timer;
@@ -28,17 +29,17 @@ public class PhysicsCore {
         this.delay = delay;
         this.launcher = launcher;
         this.simulations = new SimulationSimple[threadCount];
-        for(int i = 0; i < threadCount; i++){
+        for (int i = 0; i < threadCount; i++) {
             simulations[i] = new SimulationSimple(2.0f, mbOsObjects.getByIndex(1), mbOsObjects);
         }
         this.simulateCharacter = new SimulationCharacter(character, mbOsObjects);
     }
 
-    private void printCoreUpdateRate(){
+    private void printCoreUpdateRate() {
         updateTicks++;
-        double currentTime = System.currentTimeMillis()/1000.0;
+        double currentTime = System.currentTimeMillis() / 1000.0;
         if (currentTime - lastTime > 2.0) {
-            System.out.println("core\t" + updateTicks/2.0);
+            System.out.println("core\t" + updateTicks / 2.0);
             lastTime = currentTime;
             updateTicks = 0;
         }
@@ -50,12 +51,12 @@ public class PhysicsCore {
             System.out.println("Start runSim");
             while (!launcher.toClose()) {
                 long startTime = System.nanoTime();
-                int auxSize = mbOsObjects.size()/threadCount;
+                int auxSize = mbOsObjects.size() / threadCount;
                 Thread[] threads = new Thread[threadCount];
                 for (int i = 0; i < threadCount; i++) {
-                    threads[i] = runAuxThread(i*auxSize, (i+1)*auxSize, simulations[i]);
+                    threads[i] = runAuxThread(i * auxSize, (i + 1) * auxSize, simulations[i]);
                 }
-                for (Thread threadA: threads) {
+                for (Thread threadA : threads) {
                     try {
                         threadA.join();
                     } catch (InterruptedException e) {
@@ -63,9 +64,9 @@ public class PhysicsCore {
                     }
                 }
                 long endTime = System.nanoTime();
-                if(endTime - startTime < 9000000L){
+                if (endTime - startTime < 9000000L) {
                     try {
-                        Thread.sleep((9000000L - endTime + startTime)/1000000L);
+                        Thread.sleep((9000000L - endTime + startTime) / 1000000L);
                     } catch (Exception e) {
                         System.out.println(e);
                     }
@@ -77,7 +78,7 @@ public class PhysicsCore {
         thread.start();
     }
 
-    private Thread runAuxThread(int start, int end, SimulationSimple simulationSimple){
+    private Thread runAuxThread(int start, int end, SimulationSimple simulationSimple) {
         Thread auxThread = new Thread(() -> {
             for (int i = start; i < Math.min(end, mbOsObjects.size()); i++) {
                 MBO temp = mbOsObjects.getByIndex(i);
@@ -94,6 +95,7 @@ public class PhysicsCore {
 
     public void Inputs(long window) {
         float delta = 0.05f;
+        double deltaD = delta;
 
         /*if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
@@ -112,14 +114,28 @@ public class PhysicsCore {
             mbo.getRigidBody().adjustSpeed(0f, 0f, delta);
         }
 
-        if(glfwGetKey(window,GLFW_KEY_LEFT)==GLFW_PRESS){
+        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
-            mbo.setAngleX(mbo.getAngleX()-delta);
-            //mbo.setVector3D();
+            mbo.setAngleX(mbo.getAngleX() - delta);
+
+            Vector3D vector3D = new Vector3D();
+
+            for (int i = 0; i < mbo.voxels.length; i++) {
+                mbo.voxels[i].setAngelX(mbo.voxels[i].getAngelX()-delta);
+
+                mbo.voxels[i].setX((int) (mbo.voxels[i].getX() * Math.cos(deltaD) + mbo.voxels[i].getZ() * Math.sin(deltaD)));
+                mbo.voxels[i].setZ((int) (mbo.voxels[i].getX() * (-Math.sin(deltaD)) + mbo.voxels[i].getZ() * Math.cos(deltaD)));
+                //vector3D.setX(mbo.getX());
+                //vector3D.setY(mbo.getY());
+                //vector3D.setZ(mbo.getZ());
+                //mbo.setVector3D(vector3D);
+            }
+
+            //vector3D.setX((float) (mbo.getX() * Math.cos(deltaD) - mbo.getY() * Math.sin(deltaD)));
         }
         if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
-            mbo.setAngleX(mbo.getAngleX()+delta);
+            mbo.setAngleX(mbo.getAngleX() + delta);
             //mbo.setVector3D();
         }
 

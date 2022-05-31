@@ -92,6 +92,23 @@ public class Mass {
         } else {
             impulsFunction(dt);
         }
+        resistanceAir();
+    }
+
+    public void resistanceAir(){
+        if (vel.getX() != 0 || vel.getZ() != 0) {
+            if (vel.getZ() > 0) {
+                vel.setZ(vel.getZ() - 0.004f);
+            } else {
+                vel.setZ(vel.getZ() + 0.004f);
+            }
+            if (vel.getX() > 0) {
+                vel.setX(vel.getX() - 0.004f);
+            } else {
+                vel.setX(vel.getX() + 0.004f);
+            }
+            rigidBody.setSpeedV(vel);
+        }
     }
 
     public Collision getCollision() {

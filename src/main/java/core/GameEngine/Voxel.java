@@ -2,6 +2,7 @@ package core.GameEngine;
 
 public class Voxel {
     private int x, y, z;
+    private float angelX, AngelY,AngelZ;
     public int renderCount;
     public boolean[] renderSpec;
 
@@ -33,5 +34,41 @@ public class Voxel {
 
     public int getZ() {
         return z;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setZ(int z) {
+        this.z = z;
+    }
+
+    public float getAngelX() {
+        return angelX;
+    }
+
+    public void setAngelX(float angelX) {
+        this.angelX = angelX;
+    }
+
+    public float getAngelY() {
+        return AngelY;
+    }
+
+    public void setAngelY(float angelY) {
+        AngelY = angelY;
+    }
+
+    public float getAngelZ() {
+        return AngelZ;
+    }
+
+    public void setAngelZ(float angelZ) {
+        AngelZ = angelZ;
     }
 }
