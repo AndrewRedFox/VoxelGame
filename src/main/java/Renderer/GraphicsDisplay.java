@@ -8,7 +8,10 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.*;
+import java.nio.file.Files;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -35,39 +38,17 @@ public class GraphicsDisplay {
         frames++;
         double currentTime = glfwGetTime();
         if (currentTime - lastTime > 2.0) {
-            System.out.println("gui \t" + frames/2.0);
+            System.out.println("gui \t" + frames / 2.0);
             lastTime = currentTime;
             frames = 0;
         }
     }
 
     //GLSL код вершинного шейдера
-    final String vertexShaderSource = """
-            #version 330 core
-            layout (location = 0) in vec3 aPos;
-            layout (location = 1) in vec2 aTex;
-            out vec2 texCoord;
-                        
-            uniform mat4 camMatrix;
-                        
-            void main()
-            {
-                gl_Position = camMatrix * vec4(aPos, 1.0f);
-                texCoord = aTex;
-            }
-            """;
+    String vertexShaderSource, vertexSkyboxShaderSource;
 
     //GLSL код фрегментного шейдера
-    final String fragmentShaderSource = """
-            #version 330 core
-            out vec4 FragColor;
-            in vec2 texCoord;
-            uniform sampler2D tex0;
-            void main()
-            {
-                FragColor = texture(tex0, texCoord);
-            }
-            """;
+    String fragmentShaderSource, fragmentSkyboxShaderSource;
 
     //Конструктор
     public GraphicsDisplay(int width, int height, String name, PhysicsCore physicsCore, Launcher launcher) {
@@ -76,6 +57,15 @@ public class GraphicsDisplay {
         this.name = name;
         this.launcher = launcher;
         this.physicsCore = physicsCore;
+        try {
+            this.vertexShaderSource = Files.readString(new File("src/main/resources/vertexShader").toPath());
+            this.fragmentShaderSource = Files.readString(new File("src/main/resources/fragmentShader").toPath());
+            this.vertexSkyboxShaderSource = Files.readString(new File("src/main/resources/vertexSkyboxShader").toPath());
+            this.fragmentSkyboxShaderSource = Files.readString(new File("src/main/resources/fragmentSkyboxShader").toPath());
+        } catch (IOException e) {
+            System.out.println("Unable to load shader source");
+            e.printStackTrace();
+        }
     }
 
     //Метод запуска GUI
@@ -154,14 +144,22 @@ public class GraphicsDisplay {
         GL.createCapabilities();
         glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
         glEnable(GL_DEPTH_TEST);//отрисовка с учётом глубины
-        glEnable(GL_CULL_FACE);//отрисовка только фронтальной части
+        //glEnable(GL_CULL_FACE);//отрисовка только фронтальной части
 
         //Шейдерная программа
         Shader shader = new Shader(vertexShaderSource, fragmentShaderSource);
+        Shader skyboxShader = new Shader(vertexSkyboxShaderSource, fragmentSkyboxShaderSource);
+
+        skyboxShader.activate();
+        glUniform1i(glGetUniformLocation(skyboxShader.getId(), "skybox"), 0);
 
         //Текстура
-        Texture texture = new Texture("picture3.png", 1024, 512);
+        Texture texture = new Texture("src/main/resources/textureMap.png", 2048, 2048);
         texture.texUnit(shader, "tex0", 0);
+
+        //Skybox
+        Skybox skybox = new Skybox();
+        skybox.init();
 
         //Камера
         Camera camera = new Camera(width, height, new Vector3f(0.0f, 0.0f, 2.0f), this);
@@ -193,7 +191,7 @@ public class GraphicsDisplay {
             elementBufferObject.unbind();
 
 
-            glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+            //glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
             //активация шейдерной программы
@@ -203,13 +201,21 @@ public class GraphicsDisplay {
             camera.Inputs(window);
 
             //вычисление матрицы камеры и передача результата
-            camera.Matrix(45.0f, 0.1f, 10000.0f, shader, "camMatrix");
+            camera.Matrix(45.0f, 0.1f, 100.0f, shader, "camMatrix");
 
             texture.bind();
             vertexArrayObject.bind();
 
             //отрисовка треугольников
             glDrawElements(GL_TRIANGLES, arrayContainer.indices.length, GL_UNSIGNED_INT, 0);
+
+            vertexArrayObject.unbind();
+
+
+
+            glDepthFunc(GL_EQUAL);
+            skybox.run(45.0f, 0.1f, 100.0f, camera, skyboxShader);
+            glDepthFunc(GL_LESS);
 
             glfwSwapBuffers(window);
             glfwPollEvents();
@@ -223,6 +229,7 @@ public class GraphicsDisplay {
         elementBufferObject.delete();
         texture.delete();
         shader.delete();
+        skyboxShader.delete();
         toClose = true;
     }
 

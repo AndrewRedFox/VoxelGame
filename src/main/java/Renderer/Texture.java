@@ -46,7 +46,7 @@ public class Texture {
             }
             buffer.flip();
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-            System.out.println("Texture (capacity = " + buffer.capacity() + ") loaded");
+            System.out.println("Texture at path ' " + path + " ' (capacity = " + buffer.capacity() + ") loaded");
         } catch (Exception e) {
             System.out.println("Unable to load " + path + " texture");
         }

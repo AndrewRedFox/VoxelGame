@@ -4,12 +4,14 @@ public class Voxel {
     private int x, y, z;
     private float angelX, AngelY,AngelZ;
     public int renderCount;
+    public int[] textureIds;
     public boolean[] renderSpec;
 
     public Voxel(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
+        textureIds = new int[]{0,0,0,0,0,0};
         renderSpec = new boolean[]{true, true, true, true, true, true};
     }
 

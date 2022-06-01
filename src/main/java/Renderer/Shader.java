@@ -25,6 +25,7 @@ public class Shader {
 
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
+        System.out.println("shader id " + id);
     }
 
     int getId() {

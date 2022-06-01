@@ -13,11 +13,11 @@ public class ArrayContainer {
     float[] vertices; //информация о вершинах
     int[] indices; //индексы
     private final PhysicsCore physicsCore;//ссылка на физический движок
+    private final float texturePrecision = 8.0f;
 
     ArrayContainer(PhysicsCore physicsCore) {
         this.physicsCore = physicsCore;
     }
-
 
     private int countVoxels(MBOsObjects mbOsObjects) {
         int sum = 0;
@@ -61,39 +61,48 @@ public class ArrayContainer {
         final float voxelY = y + lineX.y * voxel.getX() + lineY.y * voxel.getY() + lineZ.y * voxel.getZ();
         final float voxelZ = z + lineX.z * voxel.getX() + lineY.z * voxel.getY() + lineZ.z * voxel.getZ();
 
+        final float delta = 1.0f / texturePrecision;
+        final float[] xId = new float[6];
+        final float[] yId = new float[6];
+
+        for (int i = 0; i < 6; i++) {
+            xId[i] = (float) (voxel.textureIds[0] / 16L) / texturePrecision;
+            yId[i] = (float) (voxel.textureIds[0] % 16L) / texturePrecision;
+        }
+
         //Тип информации идёт в разнобой (координаты + параметры в одном месте),
         //но в любом случае в шейдере всё читается 'построчно'(через layouts)
         float[] verticesTemp = {
                 //X, Y, Z, dX, dY (dX, dY) - координаты в textureMap
-                voxelX, voxelY, voxelZ, 0.0f, 0.5f,                                                              //South
-                voxelX + lineY.x, voxelY + lineY.y, voxelZ + lineY.z, 0.0f, 1.0f,
-                voxelX + lineX.x + lineY.x, voxelY + lineX.y + lineY.y, voxelZ + lineX.z + lineY.z, 0.25f, 1.0f,
-                voxelX + lineX.x, voxelY + lineX.y, voxelZ + lineX.z, 0.25f, 0.5f
+                voxelX, voxelY, voxelZ, xId[0], yId[0],                                                              //South
+                voxelX + lineY.x, voxelY + lineY.y, voxelZ + lineY.z, xId[0], yId[0] + delta,
+                voxelX + lineX.x + lineY.x, voxelY + lineX.y + lineY.y, voxelZ + lineX.z + lineY.z, xId[0] + delta, yId[0] + delta,
+                voxelX + lineX.x, voxelY + lineX.y, voxelZ + lineX.z, xId[0] + delta, yId[0]
                 ,
-                voxelX + lineX.x, voxelY + lineX.y, voxelZ + lineX.z, 0.5f, 0.5f,                                //East
-                voxelX + lineX.x + lineY.x, voxelY + lineX.y + lineY.y, voxelZ + lineX.z + lineY.z, 0.5f, 1.0f,
-                voxelX + lineX.x + lineY.x + lineZ.x, voxelY + lineX.y + lineY.y + lineZ.y, voxelZ + lineX.z + lineY.z + lineZ.z, 0.75f, 1.0f,
-                voxelX + lineX.x + lineZ.x, voxelY + lineX.y + lineZ.y, voxelZ + lineX.z + lineZ.z, 0.75f, 0.5f
+                voxelX + lineX.x, voxelY + lineX.y, voxelZ + lineX.z, xId[1], yId[1],                            //East
+                voxelX + lineX.x + lineY.x, voxelY + lineX.y + lineY.y, voxelZ + lineX.z + lineY.z, xId[1], yId[1] + delta,
+                voxelX + lineX.x + lineY.x + lineZ.x, voxelY + lineX.y + lineY.y + lineZ.y, voxelZ + lineX.z + lineY.z + lineZ.z, xId[1] + delta, yId[1] + delta,
+                voxelX + lineX.x + lineZ.x, voxelY + lineX.y + lineZ.y, voxelZ + lineX.z + lineZ.z, xId[1] + delta, yId[1]
                 ,
-                voxelX + lineY.x + lineZ.x, voxelY + lineY.y + lineZ.y, voxelZ + lineY.z + lineZ.z, 0.75f, 1.0f, //West
-                voxelX + lineY.x, voxelY + lineY.y, voxelZ + lineY.z, 1.0f, 1.0f,
-                voxelX, voxelY, voxelZ, 1.0f, 0.5f,
-                voxelX + lineZ.x, voxelY + lineZ.y, voxelZ + lineZ.z, 0.75f, 0.5f
+                voxelX + lineY.x + lineZ.x, voxelY + lineY.y + lineZ.y, voxelZ + lineY.z + lineZ.z, xId[2] + delta, yId[2],  //West
+                voxelX + lineY.x, voxelY + lineY.y, voxelZ + lineY.z, xId[2] + delta, yId[2] + delta,
+                voxelX, voxelY, voxelZ, xId[2], yId[2] + delta,
+                voxelX + lineZ.x, voxelY + lineZ.y, voxelZ + lineZ.z, xId[2], yId[2]
                 ,
-                voxelX + lineX.x + lineZ.x, voxelY + lineX.y + lineZ.y, voxelZ + lineX.z + lineZ.z, 0.25f, 0.5f, //North
-                voxelX + lineX.x + lineY.x + lineZ.x, voxelY + lineX.y + lineY.y + lineZ.y, voxelZ + lineX.z + lineY.z + lineZ.z, 0.25f, 1.0f,
-                voxelX + lineY.x + lineZ.x, voxelY + lineY.y + lineZ.y, voxelZ + lineY.z + lineZ.z, 0.5f, 1.0f,
-                voxelX + lineZ.x, voxelY + lineZ.y, voxelZ + lineZ.z, 0.5f, 0.5f
+                voxelX + lineX.x + lineZ.x, voxelY + lineX.y + lineZ.y, voxelZ + lineX.z + lineZ.z, xId[3], yId[3],  //North
+                voxelX + lineX.x + lineY.x + lineZ.x, voxelY + lineX.y + lineY.y + lineZ.y, voxelZ + lineX.z + lineY.z + lineZ.z, xId[3], yId[3] + delta,
+                voxelX + lineY.x + lineZ.x, voxelY + lineY.y + lineZ.y, voxelZ + lineY.z + lineZ.z, xId[3] + delta, yId[3] + delta,
+                voxelX + lineZ.x, voxelY + lineZ.y, voxelZ + lineZ.z, xId[3] + delta, yId[3]
                 ,
-                voxelX + lineX.x + lineZ.x, voxelY + lineX.y + lineZ.y, voxelZ + lineX.z + lineZ.z, 0.5f, 0.5f,  //Down
-                voxelX + lineZ.x, voxelY + lineZ.y, voxelZ + lineZ.z, 0.25f, 0.5f,
-                voxelX, voxelY, voxelZ, 0.25f, 0.0f,
-                voxelX + lineX.x, voxelY + lineX.y, voxelZ + lineX.z, 0.5f, 0.0f
+                voxelX + lineX.x + lineZ.x, voxelY + lineX.y + lineZ.y, voxelZ + lineX.z + lineZ.z, xId[4], yId[4] + delta,   //Down
+                voxelX + lineZ.x, voxelY + lineZ.y, voxelZ + lineZ.z, xId[4], yId[4],
+                voxelX, voxelY, voxelZ, xId[4] + delta, yId[4],
+                voxelX + lineX.x, voxelY + lineX.y, voxelZ + lineX.z, xId[4] + delta, yId[4] + delta
                 ,
-                voxelX + lineY.x, voxelY + lineY.y, voxelZ + lineY.z, 0.25f, 0.0f,                               //Up
-                voxelX + lineY.x + lineZ.x, voxelY + lineY.y + lineZ.y, voxelZ + lineY.z + lineZ.z, 0.25f, 0.5f,
-                voxelX + lineX.x + lineY.x + lineZ.x, voxelY + lineX.y + lineY.y + lineZ.y, voxelZ + lineX.z + lineY.z + lineZ.z, 0.0f, 0.5f,
-                voxelX + lineX.x + lineY.x, voxelY + lineX.y + lineY.y, voxelZ + lineX.z + lineY.z, 0.0f, 0.0f
+                voxelX + lineY.x, voxelY + lineY.y, voxelZ + lineY.z, xId[5], yId[5],                            //Up
+                voxelX + lineY.x + lineZ.x, voxelY + lineY.y + lineZ.y, voxelZ + lineY.z + lineZ.z, xId[5], yId[5] + delta,
+                voxelX + lineX.x + lineY.x + lineZ.x, voxelY + lineX.y + lineY.y + lineZ.y, voxelZ + lineX.z + lineY.z + lineZ.z, xId[5] + delta, yId[5] + delta,
+                voxelX + lineX.x + lineY.x, voxelY + lineX.y + lineY.y, voxelZ + lineX.z + lineY.z, xId[5] + delta, yId[5]
         };
 
         int promIndex = 0;
