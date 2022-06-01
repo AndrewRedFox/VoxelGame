@@ -45,10 +45,10 @@ public class GraphicsDisplay {
     }
 
     //GLSL код вершинного шейдера
-    String vertexShaderSource;
+    String vertexShaderSource, vertexSkyboxShaderSource;
 
     //GLSL код фрегментного шейдера
-    String fragmentShaderSource;
+    String fragmentShaderSource, fragmentSkyboxShaderSource;
 
     //Конструктор
     public GraphicsDisplay(int width, int height, String name, PhysicsCore physicsCore, Launcher launcher) {
@@ -60,6 +60,8 @@ public class GraphicsDisplay {
         try {
             this.vertexShaderSource = Files.readString(new File("src/main/resources/vertexShader").toPath());
             this.fragmentShaderSource = Files.readString(new File("src/main/resources/fragmentShader").toPath());
+            this.vertexSkyboxShaderSource = Files.readString(new File("src/main/resources/vertexSkyboxShader").toPath());
+            this.fragmentSkyboxShaderSource = Files.readString(new File("src/main/resources/fragmentSkyboxShader").toPath());
         } catch (IOException e) {
             System.out.println("Unable to load shader source");
             e.printStackTrace();
@@ -142,10 +144,14 @@ public class GraphicsDisplay {
         GL.createCapabilities();
         glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
         glEnable(GL_DEPTH_TEST);//отрисовка с учётом глубины
-        glEnable(GL_CULL_FACE);//отрисовка только фронтальной части
+        //glEnable(GL_CULL_FACE);//отрисовка только фронтальной части
 
         //Шейдерная программа
         Shader shader = new Shader(vertexShaderSource, fragmentShaderSource);
+        Shader skyboxShader = new Shader(vertexSkyboxShaderSource, fragmentSkyboxShaderSource);
+
+        skyboxShader.activate();
+        glUniform1i(glGetUniformLocation(skyboxShader.getId(), "skybox"), 0);
 
         //Текстура
         Texture texture = new Texture("src/main/resources/textureMap.png", 2048, 2048);
@@ -185,7 +191,7 @@ public class GraphicsDisplay {
             elementBufferObject.unbind();
 
 
-            glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+            //glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
             //активация шейдерной программы
@@ -205,8 +211,10 @@ public class GraphicsDisplay {
 
             vertexArrayObject.unbind();
 
+
+
             glDepthFunc(GL_EQUAL);
-            skybox.run(45.0f, 0.1f, 100.0f, camera);
+            skybox.run(45.0f, 0.1f, 100.0f, camera, skyboxShader);
             glDepthFunc(GL_LESS);
 
             glfwSwapBuffers(window);
@@ -221,6 +229,7 @@ public class GraphicsDisplay {
         elementBufferObject.delete();
         texture.delete();
         shader.delete();
+        skyboxShader.delete();
         toClose = true;
     }
 
