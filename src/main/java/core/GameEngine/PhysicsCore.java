@@ -95,21 +95,18 @@ public class PhysicsCore {
 
     public void Inputs(long window) {
         float delta = 0.05f;
-        float deltaD = 0.007f;
+        float deltaD = 0.001f;
 
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
-            mbo.getRigidBody().adjustSpeed((float) (-delta * Math.sin(/*Math.abs*/(mbo.getAngleY()))), 0f, (float) (-delta * Math.cos(Math.abs(mbo.getAngleY()))));
+            mbo.getRigidBody().adjustSpeed((float) (-delta * Math.sin((mbo.getAngleY()))), 0f, (float) (-delta * Math.cos(Math.abs(mbo.getAngleY()))));
         }
-       /* if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-            MBO mbo = mbOsObjects.getByIndex(0);
-            mbo.getRigidBody().adjustSpeed((float) (-delta*Math.sin(mbo.getAngleY()*60)), 0f,  (float) (delta*Math.cos(mbo.getAngleY()*60)));
-        }*/
 
         if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
             mbo.setAngleY(mbo.getAngleY() + deltaD);
         }
+
         if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
             mbo.setAngleY(mbo.getAngleY() - deltaD);
@@ -119,7 +116,6 @@ public class PhysicsCore {
 
     public void runCharacter() {
         Thread thread = new Thread(() -> {
-            //System.out.println("Start runSim");
             while (!launcher.toClose()) {
                 synchronized (this) {
                     Character temp = character;
@@ -133,7 +129,6 @@ public class PhysicsCore {
                     System.out.println(e);
                 }
             }
-            //System.out.println("End runSim");
         });
         thread.start();
     }
