@@ -95,50 +95,24 @@ public class PhysicsCore {
 
     public void Inputs(long window) {
         float delta = 0.05f;
-        float deltaD = 0.01f;
+        float deltaD = 0.007f;
 
-        /*if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-            MBO mbo = mbOsObjects.getByIndex(0);
-            mbo.getRigidBody().adjustSpeed(-delta, 0f, 0f);
-        }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-            MBO mbo = mbOsObjects.getByIndex(0);
-            mbo.getRigidBody().adjustSpeed(delta, 0f, 0f);
-        }*/
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
-            mbo.getRigidBody().adjustSpeed(0f, 0f, -delta);
+            mbo.getRigidBody().adjustSpeed((float) (-delta * Math.sin(/*Math.abs*/(mbo.getAngleY()))), 0f, (float) (-delta * Math.cos(Math.abs(mbo.getAngleY()))));
         }
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+       /* if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
-            mbo.getRigidBody().adjustSpeed(0f, 0f, delta);
-            //System.out.println(( mbo.voxels[0].getX()) * Math.cos(deltaD) - ( mbo.voxels[0].getZ()) * Math.sin(deltaD));
-        }
+            mbo.getRigidBody().adjustSpeed((float) (-delta*Math.sin(mbo.getAngleY()*60)), 0f,  (float) (delta*Math.cos(mbo.getAngleY()*60)));
+        }*/
 
         if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
-            mbo.setAngleX(mbo.getAngleX() - deltaD);
-
-
-
-            /*for (int i = 0; i < mbo.voxels.length; i++) {
-                mbo.voxels[i].setAngelX(mbo.voxels[i].getAngelX() - delta);
-
-                System.out.println("--------------------------------");
-                System.out.println(mbo.voxels[i].getX()* Math.cos(deltaD));
-                mbo.voxels[i].setX((int) (( mbo.voxels[i].getX()) * Math.cos(deltaD) - ( mbo.voxels[i].getZ()) * Math.sin(deltaD)));
-                mbo.voxels[i].setZ((int) (( mbo.voxels[i].getZ()) * Math.cos(deltaD) + ( mbo.voxels[i].getX()) * Math.sin(deltaD)));
-
-                System.out.println((( mbo.voxels[i].getX()) * Math.cos(deltaD)- ( mbo.voxels[i].getZ()) * Math.sin(deltaD)));
-
-            }*/
-
-            //vector3D.setX((float) (mbo.getX() * Math.cos(deltaD) - mbo.getY() * Math.sin(deltaD)));
+            mbo.setAngleY(mbo.getAngleY() + deltaD);
         }
         if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
             MBO mbo = mbOsObjects.getByIndex(0);
-            mbo.setAngleX(mbo.getAngleX() + deltaD);
-            //mbo.setVector3D();
+            mbo.setAngleY(mbo.getAngleY() - deltaD);
         }
 
     }

@@ -55,9 +55,9 @@ public class ArrayContainer {
             for (int i = 0; i < physicsCore.mbOsObjects.size(); i++) {
                 MBO mbo = physicsCore.mbOsObjects.getByIndex(i);
                 final float mboX = mbo.getX(), mboY = mbo.getY(), mboZ = mbo.getZ();
-                mbo.setAngleX(mbo.getAngleX() + 0.01f);
-                mbo.setAngleY(mbo.getAngleY() + 0.01f);
-                mbo.setAngleZ(mbo.getAngleZ() + 0.01f);
+                //mbo.setAngleX(mbo.getAngleX() + 0.01f);
+                //mbo.setAngleY(mbo.getAngleY() + 0.01f);
+                //mbo.setAngleZ(mbo.getAngleZ() + 0.01f);
                 final float xRot = mbo.getAngleX(), yRot = mbo.getAngleY(), zRot = mbo.getAngleZ();
                 for (Voxel voxel : mbo.voxels) {
                     setMboVertices(voxel, mboX, mboY, mboZ, idVoxelPart, xRot, yRot, zRot);
