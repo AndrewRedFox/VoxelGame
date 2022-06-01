@@ -1,6 +1,7 @@
 import core.GameEngine.GameCore.RigidBody;
 import core.GameEngine.GameCore.Vector3D;
 import core.GameEngine.MBO;
+import core.GameEngine.Voxel;
 import core.Launcher;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,8 @@ public class GraphicTests {
 
     @Test
     void angleTest() {
-        MBO[] mbos = {new MBO(MBO.genVoxelArray(1), new Vector3D(0.0f, 1.0f, 0.0f), new RigidBody(1.0f, 2.0f, 0.0f, true), 0.0f, 0.0f, 0.0f)};
+        MBO[] mbos = {new MBO(MBO.genVoxelArray(10), new Vector3D(0.0f, 0.0f, -10.0f), new RigidBody(1.0f, 2.0f, 0.0f, false), 0.0f, 0.0f, 0.0f),
+                new MBO(MBO.genVoxelArray(10), new Vector3D(10.0f, 0.0f, -10.0f), new RigidBody(0.0f, new Vector3D(0, 0, 0), 0.0f, false), 0.0f, 0.0f, 0.0f)};
 
         Launcher launcher = new Launcher(mbos, 100L);
         launcher.run();

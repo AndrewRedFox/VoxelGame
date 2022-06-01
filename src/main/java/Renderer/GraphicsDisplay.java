@@ -190,6 +190,7 @@ public class GraphicsDisplay {
         elementBufferObject.unbind();
 
         while (!glfwWindowShouldClose(window)) {
+            arrayContainer.refreshMBOS();
 
             vertexArrayObject.bind();
             vertexBufferObject.bindRefresh();

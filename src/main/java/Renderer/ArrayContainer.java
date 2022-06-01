@@ -5,7 +5,8 @@ import core.GameEngine.GameCore.Vector3D;
 import core.GameEngine.MBO;
 import core.GameEngine.PhysicsCore;
 import core.GameEngine.Voxel;
-import core.Launcher;
+import org.joml.Matrix3f;
+import org.joml.Vector3f;
 
 public class ArrayContainer {
     float[] vertices;
@@ -54,6 +55,9 @@ public class ArrayContainer {
             for (int i = 0; i < physicsCore.mbOsObjects.size(); i++) {
                 MBO mbo = physicsCore.mbOsObjects.getByIndex(i);
                 final float mboX = mbo.getX(), mboY = mbo.getY(), mboZ = mbo.getZ();
+                mbo.setAngleX(mbo.getAngleX() + 0.01f);
+                mbo.setAngleY(mbo.getAngleY() + 0.01f);
+                mbo.setAngleZ(mbo.getAngleZ() + 0.01f);
                 final float xRot = mbo.getAngleX(), yRot = mbo.getAngleY(), zRot = mbo.getAngleZ();
                 for (Voxel voxel : mbo.voxels) {
                     setMboVertices(voxel, mboX, mboY, mboZ, idVoxelPart, xRot, yRot, zRot);
@@ -66,49 +70,55 @@ public class ArrayContainer {
 
     private void setMboVertices(Voxel voxel, float x, float y, float z, int startIndex, float xRot, float yRot, float zRot) {
         final float voxelSize = GraphicsDisplay.voxelSize;
-        float voxelX = x + voxel.getX() * voxelSize, voxelY = y + voxel.getY() * voxelSize, voxelZ = z + voxel.getZ() * voxelSize;
+        final Matrix3f matrix3f = new Matrix3f().rotationXYZ(xRot, yRot, zRot);
+        final Vector3f lineX = new Vector3f(voxelSize, 0.0f, 0.0f).mul(matrix3f);//.normalize(voxelSize);
+        final Vector3f lineY = new Vector3f(0.0f, voxelSize, 0.0f).mul(matrix3f);//.normalize(voxelSize);
+        final Vector3f lineZ = new Vector3f(0.0f, 0.0f, -voxelSize).mul(matrix3f);//.normalize(voxelSize);
+        final float voxelX = x + lineX.x * voxel.getX() + lineY.x * voxel.getY() + lineZ.x * voxel.getZ();
+        final float voxelY = y + lineX.y * voxel.getX() + lineY.y * voxel.getY() + lineZ.y * voxel.getZ();
+        final float voxelZ = z + lineX.z * voxel.getX() + lineY.z * voxel.getY() + lineZ.z * voxel.getZ();
 
         float[] verticesTemp = {
 
-                voxelX,             voxelY,             voxelZ,             0.0f, 0.5f,//South
-                voxelX,             voxelY + voxelSize, voxelZ,             0.0f, 1.0f,
-                voxelX + voxelSize, voxelY + voxelSize, voxelZ,             0.25f, 1.0f,
-                voxelX + voxelSize, voxelY,             voxelZ,             0.25f, 0.5f
+                voxelX                    , voxelY                   , voxelZ                     , 0.0f, 0.5f,//South
+                voxelX + lineY.x          , voxelY + lineY.y         , voxelZ + lineY.z           , 0.0f, 1.0f,
+                voxelX + lineX.x + lineY.x, voxelY+ lineX.y + lineY.y, voxelZ + lineX.z  + lineY.z, 0.25f, 1.0f,
+                voxelX + lineX.x          , voxelY + lineX.y         , voxelZ + lineX.z           , 0.25f, 0.5f
                 ,
 
 
-                voxelX + voxelSize, voxelY,             voxelZ,             0.5f, 0.5f,//East
-                voxelX + voxelSize, voxelY + voxelSize, voxelZ,             0.5f, 1.0f,
-                voxelX + voxelSize, voxelY + voxelSize, voxelZ - voxelSize, 0.75f, 1.0f,
-                voxelX + voxelSize, voxelY,             voxelZ - voxelSize, 0.75f, 0.5f
+                voxelX + lineX.x                    , voxelY + lineX.y                     , voxelZ + lineX.z                    , 0.5f, 0.5f,//East
+                voxelX + lineX.x + lineY.x          , voxelY + lineX.y + lineY.y           , voxelZ + lineX.z + lineY.z          , 0.5f, 1.0f,
+                voxelX + lineX.x + lineY.x + lineZ.x, voxelY + lineX.y + lineY.y + lineZ.y , voxelZ + lineX.z + lineY.z + lineZ.z, 0.75f, 1.0f,
+                voxelX + lineX.x + lineZ.x          , voxelY + lineX.y + lineZ.y           , voxelZ + lineX.z + lineZ.z          , 0.75f, 0.5f
                 ,
 
 
-                voxelX,             voxelY + voxelSize, voxelZ - voxelSize, 0.75f, 1.0f,//West
-                voxelX,             voxelY + voxelSize, voxelZ,             1.0f, 1.0f,
-                voxelX,             voxelY,             voxelZ,             1.0f, 0.5f,
-                voxelX,             voxelY,             voxelZ - voxelSize, 0.75f, 0.5f
+                voxelX + lineY.x + lineZ.x, voxelY + lineY.y + lineZ.y, voxelZ + lineY.z + lineZ.z, 0.75f, 1.0f,//West
+                voxelX + lineY.x          , voxelY + lineY.y          , voxelZ + lineY.z          , 1.0f, 1.0f,
+                voxelX                    , voxelY                    , voxelZ                    , 1.0f, 0.5f,
+                voxelX + lineZ.x          , voxelY + lineZ.y          , voxelZ + lineZ.z          , 0.75f, 0.5f
                 ,
 
 
-                voxelX + voxelSize, voxelY,             voxelZ - voxelSize, 0.25f, 0.5f,//North
-                voxelX + voxelSize, voxelY + voxelSize, voxelZ - voxelSize, 0.25f, 1.0f,
-                voxelX,             voxelY + voxelSize, voxelZ - voxelSize, 0.5f, 1.0f,
-                voxelX,             voxelY,             voxelZ - voxelSize, 0.5f, 0.5f
+                voxelX + lineX.x + lineZ.x           , voxelY + lineX.y + lineZ.y           , voxelZ + lineX.z + lineZ.z           , 0.25f, 0.5f,//North
+                voxelX + lineX.x + lineY.x  + lineZ.x, voxelY + lineX.y + lineY.y  + lineZ.y, voxelZ + lineX.z + lineY.z  + lineZ.z, 0.25f, 1.0f,
+                voxelX + lineY.x + lineZ.x           , voxelY + lineY.y + lineZ.y           , voxelZ + lineY.z+ lineZ.z            , 0.5f, 1.0f,
+                voxelX + lineZ.x                     , voxelY + lineZ.y                     , voxelZ + lineZ.z                     , 0.5f, 0.5f
                 ,
 
 
-                voxelX + voxelSize, voxelY,             voxelZ - voxelSize, 0.5f, 0.5f,//Down
-                voxelX,             voxelY,             voxelZ - voxelSize, 0.25f, 0.5f,
-                voxelX,             voxelY,             voxelZ,             0.25f, 0.0f,
-                voxelX + voxelSize, voxelY,             voxelZ,             0.5f, 0.0f
+                voxelX + lineX.x + lineZ.x, voxelY + lineX.y + lineZ.y, voxelZ + lineX.z + lineZ.z, 0.5f, 0.5f,//Down
+                voxelX + lineZ.x          , voxelY + lineZ.y          , voxelZ + lineZ.z          , 0.25f, 0.5f,
+                voxelX                    , voxelY                    , voxelZ                    , 0.25f, 0.0f,
+                voxelX + lineX.x          , voxelY + lineX.y          , voxelZ + lineX.z          , 0.5f, 0.0f
                 ,
 
 
-                voxelX,             voxelY + voxelSize, voxelZ,             0.25f, 0.0f,//Up
-                voxelX,             voxelY + voxelSize, voxelZ - voxelSize, 0.25f, 0.5f,
-                voxelX + voxelSize, voxelY + voxelSize, voxelZ - voxelSize, 0.0f, 0.5f,
-                voxelX + voxelSize, voxelY + voxelSize, voxelZ,             0.0f, 0.0f
+                voxelX + lineY.x                    , voxelY + lineY.y                    , voxelZ + lineY.z                    , 0.25f, 0.0f,//Up
+                voxelX + lineY.x + lineZ.x          , voxelY + lineY.y + lineZ.y          , voxelZ + lineY.z + lineZ.z          , 0.25f, 0.5f,
+                voxelX + lineX.x + lineY.x + lineZ.x, voxelY + lineX.y + lineY.y + lineZ.y, voxelZ + lineX.z + lineY.z + lineZ.z, 0.0f, 0.5f,
+                voxelX + lineX.x + lineY.x          , voxelY + lineX.y + lineY.y          , voxelZ + lineX.z + lineY.z          , 0.0f, 0.0f
 
         };
 

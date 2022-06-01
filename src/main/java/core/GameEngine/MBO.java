@@ -31,8 +31,8 @@ public class MBO {
             voxel.renderSpec[2] = !set.contains(voxel.getLongWithAdj(-1, 0, 0, size));
             voxel.renderSpec[4] = !set.contains(voxel.getLongWithAdj(0, -1, 0, size));
             voxel.renderSpec[5] = !set.contains(voxel.getLongWithAdj(0, 1, 0, size));
-            voxel.renderSpec[0] = !set.contains(voxel.getLongWithAdj(0, 0, 1, size));
-            voxel.renderSpec[3] = !set.contains(voxel.getLongWithAdj(0, 0, -1, size));
+            voxel.renderSpec[3] = !set.contains(voxel.getLongWithAdj(0, 0, 1, size));
+            voxel.renderSpec[0] = !set.contains(voxel.getLongWithAdj(0, 0, -1, size));
             voxel.updateRenderCount();
         }
     }
