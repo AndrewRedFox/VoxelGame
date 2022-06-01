@@ -12,7 +12,7 @@ import java.util.Timer;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class PhysicsCore {
-    private MBOsObjects mbOsObjects;
+    public MBOsObjects mbOsObjects;
     private SimulationSimple[] simulations;//object
     private Launcher launcher;
     private long delay;

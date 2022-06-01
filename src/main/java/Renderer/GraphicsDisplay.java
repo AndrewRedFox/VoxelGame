@@ -163,6 +163,17 @@ public class GraphicsDisplay {
 
         arrayContainer.refreshMBOS();
 
+        /*arrayContainer.vertices = new float[]{
+                2.0f, 2.0f, -10.0f, 0.0f, 0.5f,
+                2.0f, 4.0f, -10.0f, 0.0f, 1f,
+                4.0f, 4.0f, -10.0f, 0.25f, 1.0f,
+                4.0f, 2.0f, -10.0f, 0.25f, 0.5f,
+        };
+        arrayContainer.indices = new int[]{
+                0, 2, 1,
+                0, 3, 2,
+        };*/
+
         VAO vertexArrayObject = new VAO();
         vertexArrayObject.bind();
         VBO vertexBufferObject = new VBO(arrayContainer);
