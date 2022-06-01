@@ -46,16 +46,17 @@ public class ArrayContainer {
 
     void refreshMBOS(){
         //synchronized (physicsCore) {
-            mboSLength = countVoxels(physicsCore.getMbOsObjects());
+            mboSLength = countVoxels(physicsCore.mbOsObjects);
             vertices = new float[mboSLength * 20];
             indices = new int[mboSLength * 6];
 
             int idVoxelPart = 0;
-            for (int i = 0; i < physicsCore.getMbOsObjects().size(); i++) {
-                MBO mbo = physicsCore.getMbOsObjects().getByIndex(i);
-                float mboX = mbo.getX(), mboY = mbo.getY(), mboZ = mbo.getZ();
+            for (int i = 0; i < physicsCore.mbOsObjects.size(); i++) {
+                MBO mbo = physicsCore.mbOsObjects.getByIndex(i);
+                final float mboX = mbo.getX(), mboY = mbo.getY(), mboZ = mbo.getZ();
+                final float xRot = mbo.getAngleX(), yRot = mbo.getAngleY(), zRot = mbo.getAngleZ();
                 for (Voxel voxel : mbo.voxels) {
-                    setMboVertices(voxel, mboX, mboY, mboZ, idVoxelPart);
+                    setMboVertices(voxel, mboX, mboY, mboZ, idVoxelPart, xRot, yRot, zRot);
                     idVoxelPart+= voxel.renderCount;
                     //System.out.println(mboSLength + "\t" + idVoxelPart);
                 }
@@ -63,7 +64,7 @@ public class ArrayContainer {
         //}
     }
 
-    private void setMboVertices(Voxel voxel, float x, float y, float z, int startIndex) {
+    private void setMboVertices(Voxel voxel, float x, float y, float z, int startIndex, float xRot, float yRot, float zRot) {
         final float voxelSize = GraphicsDisplay.voxelSize;
         float voxelX = x + voxel.getX() * voxelSize, voxelY = y + voxel.getY() * voxelSize, voxelZ = z + voxel.getZ() * voxelSize;
 
