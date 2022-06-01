@@ -92,7 +92,7 @@ public class Mass {
         } else {
             impulsFunction(dt);
         }
-        resistanceAir();
+        resistanceAir();//сопротивление воздуха
     }
 
     public void resistanceAir(){
