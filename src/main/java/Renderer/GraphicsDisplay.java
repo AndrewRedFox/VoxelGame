@@ -2,7 +2,6 @@ package Renderer;
 
 import core.GameEngine.PhysicsCore;
 import core.Launcher;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
@@ -17,24 +16,24 @@ import static org.lwjgl.opengl.GL33.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+//Графический дисплей, основные вычисления и операции, связанные с графическим выводом
 public class GraphicsDisplay {
     public static final int vertexSize = 4;
     public static final float voxelSize = 2.0f;
-    private long window;
-    private final int height;
-    private final int width;
+    private long window;//идентификатор окна
+    private final int height;//высота окна
+    private final int width;//ширина окна
     private double frames = 0;
-    private double currentTime = 0.0;
     public boolean toClose = false;
     private double lastTime = 0.0;
-    private final String name;
-    private Launcher launcher;
-    private PhysicsCore physicsCore;
+    private final String name;//название окна
+    private final Launcher launcher;//ссылка на лаунчер
+    private final PhysicsCore physicsCore;//ссылка на физический движок
 
-
+    //вывод fps в консоль
     private void printRenderTime() {
         frames++;
-        currentTime = glfwGetTime();
+        double currentTime = glfwGetTime();
         if (currentTime - lastTime > 2.0) {
             System.out.println("gui \t" + frames/2.0);
             lastTime = currentTime;
@@ -42,7 +41,8 @@ public class GraphicsDisplay {
         }
     }
 
-    String vertexShaderSource = """
+    //GLSL код вершинного шейдера
+    final String vertexShaderSource = """
             #version 330 core
             layout (location = 0) in vec3 aPos;
             layout (location = 1) in vec2 aTex;
@@ -57,7 +57,8 @@ public class GraphicsDisplay {
             }
             """;
 
-    String fragmentShaderSource = """
+    //GLSL код фрегментного шейдера
+    final String fragmentShaderSource = """
             #version 330 core
             out vec4 FragColor;
             in vec2 texCoord;
@@ -68,6 +69,7 @@ public class GraphicsDisplay {
             }
             """;
 
+    //Конструктор
     public GraphicsDisplay(int width, int height, String name, PhysicsCore physicsCore, Launcher launcher) {
         this.height = height;
         this.width = width;
@@ -76,6 +78,7 @@ public class GraphicsDisplay {
         this.physicsCore = physicsCore;
     }
 
+    //Метод запуска GUI
     public void run() {
         System.out.println("GraphicsDisplay has launched with LWJGL " + Version.getVersion());
 
@@ -146,50 +149,36 @@ public class GraphicsDisplay {
         glfwShowWindow(window);
     }
 
+    //Метод, в котором происходит основной цикл отрисовки GUI
     private void loop() {
         GL.createCapabilities();
         glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_CULL_FACE);
+        glEnable(GL_DEPTH_TEST);//отрисовка с учётом глубины
+        glEnable(GL_CULL_FACE);//отрисовка только фронтальной части
 
+        //Шейдерная программа
         Shader shader = new Shader(vertexShaderSource, fragmentShaderSource);
 
+        //Текстура
         Texture texture = new Texture("picture3.png", 1024, 512);
         texture.texUnit(shader, "tex0", 0);
 
+        //Камера
         Camera camera = new Camera(width, height, new Vector3f(0.0f, 0.0f, 2.0f), this);
 
+        //Преобразователь и хранилище информации для отрисовки
         ArrayContainer arrayContainer = new ArrayContainer(physicsCore);
 
+        //обновление информации
         arrayContainer.refreshMBOS();
-
-        /*arrayContainer.vertices = new float[]{
-                2.0f, 2.0f, -10.0f, 0.0f, 0.5f,
-                2.0f, 4.0f, -10.0f, 0.0f, 1f,
-                4.0f, 4.0f, -10.0f, 0.25f, 1.0f,
-                4.0f, 2.0f, -10.0f, 0.25f, 0.5f,
-        };
-        arrayContainer.indices = new int[]{
-                0, 2, 1,
-                0, 3, 2,
-        };*/
 
         VAO vertexArrayObject = new VAO();
         vertexArrayObject.bind();
         VBO vertexBufferObject = new VBO(arrayContainer);
         EBO elementBufferObject = new EBO(arrayContainer);
 
-        vertexBufferObject.bindRefresh();
-        elementBufferObject.bindRefresh();
-
-        vertexArrayObject.LinkAttrib(vertexBufferObject, 0, 20, 0);
-        vertexArrayObject.LinkAttrib(vertexBufferObject, 1, 20, 12);
-
-        vertexArrayObject.unbind();
-        vertexBufferObject.unbind();
-        elementBufferObject.unbind();
-
         while (!glfwWindowShouldClose(window)) {
+            //обновление информации
             arrayContainer.refreshMBOS();
 
             vertexArrayObject.bind();
@@ -207,18 +196,25 @@ public class GraphicsDisplay {
             glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
+            //активация шейдерной программы
             shader.activate();
 
+            //чтение ввода для камеры
             camera.Inputs(window);
+
+            //вычисление матрицы камеры и передача результата
             camera.Matrix(45.0f, 0.1f, 10000.0f, shader, "camMatrix");
 
             texture.bind();
             vertexArrayObject.bind();
 
+            //отрисовка треугольников
             glDrawElements(GL_TRIANGLES, arrayContainer.indices.length, GL_UNSIGNED_INT, 0);
 
             glfwSwapBuffers(window);
             glfwPollEvents();
+
+            //чтение ввода для физического движка
             physicsCore.Inputs(window);
             printRenderTime();
         }

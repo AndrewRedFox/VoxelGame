@@ -8,15 +8,17 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL33.glGetUniformLocation;
 import static org.lwjgl.opengl.GL33.glUniformMatrix4fv;
 
+//Камера
 public class Camera {
-    private final Vector3f up;
-    public Vector3f position, orientation;
-    public final int width, height;
-    public float speed = 0.1f, sensitivity = 100.0f;
+    private final Vector3f up;//вектор, направленный вверх
+    public Vector3f position, orientation;//позиция, ориентация камеры
+    public final int width, height;//ширина и высота отображаемой картинки
+    public float speed = 0.1f, sensitivity = 100.0f;//скорость и чувствительность(мыши)
     private static final float pi = 3.14159265359f;
     private boolean firstClick;
-    private final GraphicsDisplay graphicsDisplay;
+    private final GraphicsDisplay graphicsDisplay;//ссылка на GraphicsDisplay
 
+    //Конструктор
     Camera(int width, int height, Vector3f position, GraphicsDisplay graphicsDisplay) {
         orientation = new Vector3f(0.0f, 0.0f, -1.0f);
         up = new Vector3f(0.0f, 1.0f, 0.0f);
@@ -27,6 +29,7 @@ public class Camera {
         firstClick = true;
     }
 
+    //Вычисление матрицы и передача результата в шейдерную программу
     void Matrix(float FOVdeg, float nearPlane, float farPlane, Shader shader, String uniform) {
 
         Matrix4f view = new Matrix4f();
@@ -40,10 +43,11 @@ public class Camera {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             glUniformMatrix4fv(projLoc, false, proj.mul(view).get(stack.mallocFloat(16)));
         } catch (Exception e) {
-            System.out.println(e + " error in Camera");
+            System.out.println(e + " error in Camera: can't correctly send uniform data");
         }
     }
 
+    //Чтение ввода
     void Inputs(long window) {
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
             graphicsDisplay.toClose = true;

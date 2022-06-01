@@ -7,9 +7,11 @@ import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL33.*;
 
+//Тестура, в основном используется как карта текстур(textureMap)
 public class Texture {
-    private final int texture;
+    private final int texture;//идентификатор текстуры
 
+    //Конструктор
     Texture(String path, int width, int height) {
 
         texture = glGenTextures();
@@ -23,6 +25,7 @@ public class Texture {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
+        //Чтение файла формата .png и передача его в видеопроцессор
         try {
             File imgPath = new File(path);
             BufferedImage image = ImageIO.read(imgPath);
@@ -46,14 +49,13 @@ public class Texture {
             System.out.println("Texture (capacity = " + buffer.capacity() + ") loaded");
         } catch (Exception e) {
             System.out.println("Unable to load " + path + " texture");
-            //System.out.println(e);
         }
 
         glGenerateMipmap(GL_TEXTURE_2D);
-
         unbind();
     }
 
+    //Задание текстуры для отрисовки
     public void texUnit(Shader shader, String uniform, int unit) {
         int tex0Uni = glGetUniformLocation(shader.getId(), uniform);
         shader.activate();
@@ -61,14 +63,14 @@ public class Texture {
     }
 
     public void bind() {
-        glBindTexture(GL_TEXTURE_2D, texture);
+        glBindTexture(GL_TEXTURE_2D, texture);//привязка текстуры
     }
 
     public void unbind() {
-        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);//отвязка текстуры(через задание индекса привязываемой текстуры равным 0)
     }
 
     public void delete() {
-        glDeleteTextures(texture);
+        glDeleteTextures(texture);//удаление текстуры
     }
 }
